@@ -1,0 +1,50 @@
+<?php
+
+  //instancia de la clase controlador
+  $ingresarUsuario = new MVC();
+  //ejecucion del metodo ingresoUsuarioController para intentar iniciar sesion
+  $ingresarUsuario->ingresoUsuarioController();
+?>
+
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <?php
+    ?>
+    <Center>
+     <form method="post" action="">
+    <div class="row">
+      <div>
+
+        <center><h1><img src="view/assets/img/upv_logo.png" width="200" height="200"/></h1></center>
+        <h3>Sistema de Control de Inventario</h3>
+        <p>Inicie sesion para continuar</p>
+        <div class="section-container tabs" data-section>
+          <section class="section">
+            <div class="content">
+              <div class="row">
+                <p>
+                  <input type="text" name="username" required="" placeholder="Username" required="">
+                </p>
+                <p>
+                  <input type="text" name="password" required="" placeholder="Password" required="">
+                </p>
+                <p>
+                  <input type="submit" name="btn_add" value="Iniciar sesion" class="button tiny success">
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </div>
+    </form>
+    
+
+    <?php require_once('footer.php'); ?>
