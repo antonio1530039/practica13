@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-05-2018 a las 14:35:41
+-- Tiempo de generación: 31-05-2018 a las 11:08:33
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.9
 
@@ -25,26 +25,41 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `categorias`
+--
+
+CREATE TABLE `categorias` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `deleted` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`, `deleted`) VALUES
+(1, 'Lacteos', 0),
+(2, 'Herramientas', 0),
+(3, 'Refrescos', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `productos`
 --
 
 CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
+  `codigo` varchar(30) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
   `precio_unitario` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
+  `fecha_registro` date NOT NULL,
   `deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `productos`
---
-
-INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio_unitario`, `stock`, `deleted`) VALUES
-(1, 'Galletas Marias', 'Galletas gamesa traidas desde arabia', '10.50', 0, 0),
-(2, 'Coca cola', '600 ml botella de plastico', '15.50', 50, 0),
-(3, 'Cacahuates CRT', 'Cacahuates japoneses', '5.00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -61,13 +76,6 @@ CREATE TABLE `transaccion` (
   `fecha` date NOT NULL,
   `deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `transaccion`
---
-
-INSERT INTO `transaccion` (`id`, `id_producto`, `id_usuario`, `cantidad`, `tipo`, `fecha`, `deleted`) VALUES
-(1, 2, 1, 10, 'Entrada', '2018-05-30', 0);
 
 -- --------------------------------------------------------
 
@@ -94,10 +102,17 @@ INSERT INTO `usuarios` (`id`, `user`, `password`, `deleted`) VALUES
 --
 
 --
+-- Indices de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_categoria` (`id_categoria`);
 
 --
 -- Indices de la tabla `transaccion`
@@ -118,10 +133,16 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `transaccion`
@@ -138,6 +159,12 @@ ALTER TABLE `usuarios`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `productos`
+--
+ALTER TABLE `productos`
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`);
 
 --
 -- Filtros para la tabla `transaccion`

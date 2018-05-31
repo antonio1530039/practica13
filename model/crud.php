@@ -26,12 +26,15 @@ class Crud extends Conexion{
 
 	//metodo registroProductoModel: dado un arreglo asociativo de datos, se inserta en la tabla productos los datos especificados
 	public function registroProductoModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO productos(nombre, descripcion, precio_unitario, stock) VALUES(:nombre, :descripcion, :precio_unitario, :stock)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO productos(codigo, nombre, descripcion, precio_unitario, stock, fecha_registro, id_categoria) VALUES(:codigo, :nombre, :descripcion, :precio_unitario, :stock, :fecha, :categoria)");
 		//preparacion de parametros
+		$stmt->bindParam(":codigo", $data['codigo']);
 		$stmt->bindParam(":nombre", $data['nombre']);
 		$stmt->bindParam(":descripcion", $data['descripcion']);
 		$stmt->bindParam(":precio_unitario", $data['precio_unitario']);
 		$stmt->bindParam(":stock", $data['stock']);
+		$stmt->bindParam(":fecha", $data['fecha']);
+		$stmt->bindParam(":categoria", $data['categoria']);
 		if($stmt->execute()) //ejecucion
 			return "success"; //respuesta
 		else
@@ -105,7 +108,7 @@ class Crud extends Conexion{
 	//metodo getRegModel: dado un id de un registro y el nombre de la tabla se retorna la informacion del id asociado
 	public function getRegModel($id, $table){
 		//en base al nombre de la tabla se define el nombre de la llave primaria de la tabla
-		if($table=="productos" || $table == "usuarios"){
+		if($table=="productos" || $table == "usuarios" || $table == "categorias"){
 			$idName = "id";
 		}
     	//se prepara la consulta sql
@@ -129,11 +132,13 @@ class Crud extends Conexion{
 
 	//metodo actualizarProductoModel: dado un array de datos y un id de un producto, se actualizan los datos de este con los datos mandados
 	public function actualizarProductoModel($data, $id){
-		$stmt = Conexion::conectar()->prepare("UPDATE productos SET nombre = :nombre, descripcion = :descripcion, precio_unitario = :precio_unitario, stock = :stock WHERE id = $id");
+		$stmt = Conexion::conectar()->prepare("UPDATE productos SET codigo=:codigo, nombre = :nombre, id_categoria=:categoria,  descripcion = :descripcion, precio_unitario = :precio_unitario, stock = :stock WHERE id = $id");
 		$stmt->bindParam(":nombre", $data['nombre']);
+		$stmt->bindParam(":codigo", $data['codigo']);
 		$stmt->bindParam(":descripcion", $data['descripcion']);
 		$stmt->bindParam(":precio_unitario", $data['precio_unitario']);
 		$stmt->bindParam(":stock", $data['stock']);
+		$stmt->bindParam(":categoria", $data['categoria']);
 		if($stmt->execute())
 			return "success";
 		else

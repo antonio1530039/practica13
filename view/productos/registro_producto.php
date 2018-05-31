@@ -9,48 +9,105 @@
 
 ?>
 
-<!doctype html>
-<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de producto</title>
-
   </head>
-  <body>
-    <form method="post">
-    <div class="row">
-      <div>
-        <h3>Registro de producto</h3>
-        <p>
-          Por favor, ingrese la información que se pide a continuación
-        </p>
-        <input type="button" name="btn_back" value="Regresar" onclick="window.location = 'index.php?action=productos'" class="button tiny success" style="float: right;">
-        <hr>
-      </div>
-        <div>
-            <p>
-              <label>Nombre</label>
-              <input type="text" name="nombre" placeholder="Nombre del producto" required="">
-            </p>
-
-            <p>
-              <label>Descripcion</label>
-              <input type="text" name="descripcion" placeholder="Descripcion" required="">
-            </p>
-            <p>
-              <label>Precio unitario</label>
-              <input type="number" step="0.0000001" name="precio" placeholder="Precio unitario" required="">
-            </p>
-            <p>
-              <label>Stock disponible</label>
-              <input type="number" step="1" name="stock" placeholder="Unidades en stock" required="">
-            </p>
-               <input type="submit" name="btn_agregar" value="Registrar" class="button tiny success" style="float: right;">
-            
-        </div>
-      </div>
+  <body class="hold-transition login-page">
+<!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Registro de producto</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+              <li class="breadcrumb-item active"><a href="index.php?action=productos"> Gestión de Productos</a></li>
+              <li class="breadcrumb-item active">Registro de producto</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
-    </form>
+    <section class="content">
+      <div class="container-fluid">
+        <form role="form" method="post">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-sm-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+               <div class="card-header">
+                        <h3 class="card-title">Por favor, Ingresa la información del producto</h3>
+                </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+                <div class="card-body login-card-body">
+                  <div class="form-group">
+                    <p>
+                    <label>Codigo</label>
+                    <input type="text" class="form-control" name="codigo" placeholder="Ingresa el codigo del producto" required="">
+                  </p>
+                  </div>
+                  <div class="form-group">
+                    <p>
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" name="nombre" placeholder="Ingresa el nombre del producto" required="">
+                  </p>
+                  </div>
+                  <div class="form-group">
+                    <p>
+                    <label>Descripcion</label>
+                    <input type="text" class="form-control" name="descripcion" placeholder="Ingresa la descripcion del producto" required="">
+                  </p>
+                  </div>
+                  <div class="form-group">
+                    <p>
+                    <label>Categoria</label>
+                    <select class="form-control select2" name="categoria">
+                      <?php $controller_productos->getSelectForCategorias(""); ?>
+                    </select>
+                  </p>
+                  </div>
+                  <div class="form-group">
+                    <label>Precio unitario</label>
+                        <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                      </div>
+                      <input type="number" step="0.0000001"  class="form-control" name="precio" required="">
+                      <div class="input-group-append">
+                        <span class="input-group-text"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Stock</label>
+                        <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Unidades</span>
+                      </div>
+                      <input type="number" step="1"  class="form-control" name="stock" required="">
+                      <div class="input-group-append">
+                        <span class="input-group-text"></span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                   <input type="submit" name="btn_agregar" value="Registrar" class="btn btn-success" style="float: right;">
+            
+               
+            </div>   
+            </div>
+            </div> 
+                
+              </div>
+</div>
+</div>
+  </form>
+</div>
+</section>
   </body>
+
   </html>

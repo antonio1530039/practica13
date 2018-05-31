@@ -5,46 +5,47 @@
   //ejecucion del metodo ingresoUsuarioController para intentar iniciar sesion
   $ingresarUsuario->ingresoUsuarioController();
 ?>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+<div class="login-box">
 
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-  </head>
-  <body>
-    <?php
-    ?>
-    <Center>
-     <form method="post" action="">
-    <div class="row">
-      <div>
-
-        <center><h1><img src="view/assets/img/upv_logo.png" width="200" height="200"/></h1></center>
-        <h3>Sistema de Control de Inventario</h3>
-        <p>Inicie sesion para continuar</p>
-        <div class="section-container tabs" data-section>
-          <section class="section">
-            <div class="content">
-              <div class="row">
-                <p>
-                  <input type="text" name="username" required="" placeholder="Username" required="">
-                </p>
-                <p>
-                  <input type="text" name="password" required="" placeholder="Password" required="">
-                </p>
-                <p>
-                  <input type="submit" name="btn_add" value="Iniciar sesion" class="button tiny success">
-                </p>
-              </div>
-            </div>
-          </section>
+  <div class="login-logo">
+    <b>Sistema de Control de Inventario</b>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Identificate para iniciar sesion</p>
+      <form action="" method="post">
+        <div class="form-group has-feedback">
+          <input type="text" class="form-control" placeholder="Username" name="username" required="">
+          <span class="fa fa-envelope form-control-feedback"></span>
         </div>
-      </div>
-
+        <div class="form-group has-feedback">
+          <input type="password" class="form-control" placeholder="Password" name="password" required="">
+          <span class="fa fa-lock form-control-feedback"></span>
+        </div>
+          <div>
+            <button type="submit" name="btn_add" class="btn btn-primary btn-block btn-flat" style="float:right">Iniciar Sesion</button>
+          </div>
+          <!-- /.col -->
+      </form>
     </div>
-    </form>
-    
+    <!-- /.login-card-body -->
+  </div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<!-- /.login-box -->
 
-    <?php require_once('footer.php'); ?>
+
+
+
+

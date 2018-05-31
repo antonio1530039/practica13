@@ -3,6 +3,7 @@
 class MVC{
   //metodo que muestra la plantilla base
 	public function showTemplate(){
+		session_start();
 		include "view/template.php";
 	}
 
@@ -25,22 +26,27 @@ class MVC{
 		//session_start();
 		if(isset($_SESSION)){
 			if(isset($_SESSION['login'])){
-            	if(!$_SESSION['login'])
+            	if(!$_SESSION['login']){
           			echo "<script>window.location='index.php?action=login';</script>";  
+          			return false;
+            	}else{
+            		return true;
+            	}
       }else{
         echo "<script>window.location='index.php?action=login';</script>"; 
+        return false;
       }
 		}else{
 			echo "<script>window.location='index.php?action=login';</script>";
+			return false;
 		}
 	}
   
   //metodo especifico para el archivo header.php o navegacion, el cual verifica si el usuario esta logueado, entonces muestra el menu
-  public function showNav(){
-    session_start();
+ public function showNav(){
     if(isset($_SESSION)){
       if(isset($_SESSION['login'])){
-          if($_SESSION['login']){
+         /* if($_SESSION['login']){
             //verificar tipo de usuario: superadmin o empleado y mostrar el nav correspondiente
           echo "
           <h1><img src='view/assets/img/upv_logo.png' width='100' height='100' style='float:left'/></h1>
@@ -49,11 +55,13 @@ class MVC{
           <li><a href='index.php?action=productos' class='button tiny'>Gestion de Productos</a></li>
           <li><a href='index.php?action=logout' class='button tiny' style='background-color:red'>Log out</a></li>
         </ul>";
-        }
+        }*/
+      }else{
+      	echo "<script>window.location='index.php?action=login';</script>";
       }
 	}
   }
-  
+
   	//funcion encargada de ingresar los valores del login e iniciar sesion
 	public function ingresoUsuarioController(){
 		if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['btn_add'])){
@@ -72,7 +80,7 @@ class MVC{
 	//funcion que imprime un mensaje en el inicio con el nombre del maestro tomado de la variable sesion
 	public function mostrarInicioController(){
 		if(isset($_SESSION['user_info'])){
-			echo "<center><h2>Bienvenido ".$_SESSION['user_info']['user']."</h2></center>";
+			echo "<center>".$_SESSION['user_info']['user']."</center>";
 		}
 	}
 
@@ -82,14 +90,18 @@ class MVC{
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de los productos
 			foreach ($informacion as $row => $item) {
+				$categoria = Crud::getRegModel($item['id_categoria'], "categorias");
 				echo "<tr>";
 				echo "<td>".$item['id']."</td>";
+				echo "<td>".$item['codigo']."</td>";
 				echo "<td>".$item['nombre']."</td>";
 				echo "<td>".$item['descripcion']."</td>";
 				echo "<td>".$item['precio_unitario']."</td>";
+				echo "<td>".$categoria['nombre']."</td>";
+				echo "<td>".$item['fecha_registro']."</td>";
 				echo "<td>".$item['stock']."</td>";
-          		echo "<td>"."<a href=index.php?action=editar_producto&id=".$item['id']." class='button radius tiny secondary'>Ver detalles</a></td>";
-				echo "<td>"."<a href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
+          		echo "<td>"."<a class='btn btn-secondary' href=index.php?action=editar_producto&id=".$item['id'].">Modificar</a></td>";
+				echo "<td>"."<a class='btn btn-danger' href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
         echo "</tr>";
 				
 			}
@@ -176,6 +188,29 @@ class MVC{
 		
 	}
 
+	//funcion que crea un select con las categorias registradas
+	public function getSelectForCategorias($firstID){
+		$informacion = Crud::vistaXTablaModel("categorias"); //se obtienen todos las categorias de la bd mediante la conexion al modelo
+		if(!empty($informacion)){
+			if($firstID==""){
+				foreach ($informacion as $row => $item) {
+					echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+				}
+			}else{
+				//se obtiene la informacion del maestro en base al parametro firstID
+				$categoria = Crud::getRegModel($firstID, "categorias");
+				//se coloca primero la opcion del select del maestro
+				echo "<option value='".$categoria['id']."'>".$categoria['nombre']."</option>";
+				foreach ($informacion as $row => $item) { //se imprimen los maestros restantes
+					if($item['id']!=$firstID)
+						echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+				}
+			}
+			
+			
+		}
+	}
+
 	//funcion que crea un select con los maestros registrados
 	public function getSelectForMaestros($firstID){
 		$informacion = Crud::vistaXTablaModel("maestros"); //se obtienen todos los maestros de la bd mediante la conexion al modelo
@@ -244,7 +279,10 @@ class MVC{
 			$data = array('nombre'=> $_POST['nombre'],
 						'descripcion'=> $_POST['descripcion'],
 						'precio_unitario'=> $_POST['precio'],
-						'stock'=> $_POST['stock']
+						'stock'=> $_POST['stock'],
+						'codigo'=> $_POST['codigo'],
+						'fecha'=> date("Y-m-d"),
+						'categoria'=> $_POST['categoria'],
 					);
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroProductoModel($data);
@@ -350,30 +388,92 @@ class MVC{
 		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
 		$peticion = Crud::getRegModel($id, 'productos'); //peticion al modelo del registro especificado por el id
 		if(!empty($peticion)){
-			//mostrado de los controles con los valores de los datos del producto
-			echo "<p>
-              <label>Id del producto</label>
-              <input type='text' name='id' placeholder='ID' required='' value='".$peticion['id']."' readonly='true'>
-            </p>";
-            echo "<p>
-              <label>Nombre</label>
-              <input type='text' name='nombre' placeholder='Nombre' required='' value='".$peticion['nombre']."'>
-            </p>";
-            echo "<p>
-              <label>Descripcion</label>
-              <input type='text' name='descripcion' placeholder='Descripcion' required='' value='".$peticion['descripcion']."'>
-            </p>";
-            echo "<p>
-              <label>Precio unitario</label>
-              <input type='number' step='0.0000001' name='precio' placeholder='Precio' required='' value='".$peticion['precio_unitario']."'>
-            </p>";
-            echo "<p>
-              <label>Stock</label>
-              <input type='number' step='1' name='stock' placeholder='Stock' required='' value='".$peticion['stock']."'>
-            </p>";
-
+			echo "
+				<div class='form-group'>
+                    <p>
+                    <label>Id</label>
+                    <input type='text' class='form-control' name='id' value='".$peticion['id']."' placeholder='Ingresa el codigo del producto' required='' readonly='true'>
+                  </p>
+                  </div>
+				<div class='form-group'>
+                    <p>
+                    <label>Codigo</label>
+                    <input type='text' class='form-control' name='codigo' value='".$peticion['codigo']."' placeholder='Ingresa el codigo del producto' required=''>
+                  </p>
+                  </div>
+                  <div class='form-group'>
+                    <p>
+                    <label>Nombre</label>
+                    <input type='text' class='form-control' name='nombre' value='".$peticion['nombre']."' placeholder='Ingresa el nombre del producto' required=''>
+                  </p>
+                  </div>
+                  <div class='form-group'>
+                    <p>
+                    <label>Descripcion</label>
+                    <input type='text' class='form-control' name='descripcion' value='".$peticion['descripcion']."'  placeholder='Ingresa la descripcion del producto' required=''>
+                  </p>
+                  </div>
+                  <div class='form-group'>
+                    <p>
+                    <label>Categoria</label>
+                    <select class='form-control select2' name='categoria'>";
+                      $this->getSelectForCategorias($peticion['id_categoria']);
+                    echo "</select>
+                  </p>
+                  </div>
+                  <div class='form-group'>
+                    <label>Precio unitario</label>
+                        <div class='input-group'>
+                      <div class='input-group-prepend'>
+                        <span class='input-group-text'>$</span>
+                      </div>
+                      <input type='number' value='".$peticion['precio_unitario']."'  step='0.0000001'  class='form-control' name='precio' required=''>
+                      <div class='input-group-append'>
+                        <span class='input-group-text'></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='form-group'>
+                    <label>Stock</label>
+                        <div class='input-group'>
+                      <div class='input-group-prepend'>
+                        <span class='input-group-text'>Unidades</span>
+                      </div>
+                      <input type='number' step='1' value='".$peticion['stock']."' class='form-control' name='stock' required=''>
+                      <div class='input-group-append'>
+                        <span class='input-group-text'></span>
+                      </div>
+                    </div>
+                  </div>
+                  ";
 		}
 	}
+
+	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
+	public function actualizarProductoController(){
+		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
+			//se toman los valores de los controles y se guardan en un array
+			$data = array(
+				"id"=>$_POST['id'],
+				"codigo"=>$_POST['codigo'],
+				"nombre"=>$_POST['nombre'],
+				"descripcion"=>$_POST['descripcion'],
+				"precio_unitario"=>$_POST['precio'],
+				"stock"=>$_POST['stock'],
+				"categoria"=>$_POST['categoria'],
+			);
+
+			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
+			$peticion = Crud::actualizarProductoModel($data, $_POST['id']);
+			if($peticion == "success"){ //verificacion de la respuesta por el modelo
+       echo "<script>window.location='index.php?action=productos';</script>";
+        
+			}else{
+				echo "<script>alert('Error al actualizar')</script>";
+			}
+		}
+	}
+
 
 	//funcion encargada de, dado un numero de empleado de un maestro, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
 	public function getMaestroController(){
@@ -515,24 +615,30 @@ class MVC{
 	function setQueryController($table, $title, $field, $operator, $equals){
 		$peticion = Crud::getQueryFromX($table, $field, $operator,$equals); //peticion al modelo
 		//se imprime la tabla con informacion
-		echo "<table width='100%'>";
+		echo "<div class='form-group'>
+					<div class='card-header'>
+                        <h3 class='card-title'>$title (".count($peticion).")</h3>
+                      </div>
+                    <div class='card'>";
+		echo "<table width='100%' class='table table-bordered table-striped'>";
 			echo "<thead>";
 				echo "<tr>";
 					if($table=="transaccion"){
-						echo "<td>$title: ".count($peticion)."</td>";
-						echo "<td>Cantidad</td>";
-						echo "<td>Tipo de transaccion</td>";
-						echo "<td>Fecha</td>";
-						echo "<td>Realizada por</td>";
+						echo "<th>Productos</th>";
+						echo "<th>Cantidad</th>";
+						echo "<th>Tipo de transaccion</th>";
+						echo "<th>Fecha</th>";
+						echo "<th>Realizada por</th>";
 					}else{
-						echo "<td>$title: ".count($peticion)."</td>";
-						echo "<td>$field</td>";
+						echo "<th>$title: ".count($peticion)."</th>";
+						echo "<th>$field</th>";
 					}
 					
 				echo "</tr>";
 			echo "</thead>";
-			echo "<tbody>";
+		echo "<tbody>";
 		if(!empty($peticion)){ //se verifica que la variable peticion no este vacia
+			echo "<tbody>";
 			foreach ($peticion as $row => $item) {
 				echo "<tr>";
 				if($table == "transaccion"){
@@ -548,35 +654,15 @@ class MVC{
 					echo "<td>".$item[$field]."</td>";
 				}
 				
-				echo "<tr>";
+				echo "</tr>";
       		}
-      		echo "</tbody>";
+      		
+		}
+		echo "</tbody>";
       		echo "</table>";
-		}
+      		echo "</div>";
+      		echo "</div>";
 	}
-
-	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
-	public function actualizarProductoController(){
-		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
-			//se toman los valores de los controles y se guardan en un array
-			$data = array(
-				"nombre"=>$_POST['nombre'],
-				"descripcion"=>$_POST['descripcion'],
-				"precio_unitario"=>$_POST['precio'],
-				"stock"=>$_POST['stock']
-			);
-
-			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
-			$peticion = Crud::actualizarProductoModel($data, $_POST['id']);
-			if($peticion == "success"){ //verificacion de la respuesta por el modelo
-       echo "<script>window.location='index.php?action=productos';</script>";
-        
-			}else{
-				echo "<script>alert('Error al actualizar')</script>";
-			}
-		}
-	}
-
 
 	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo (actualizacion de maestro)
 	public function actualizarMaestroController(){
