@@ -28,6 +28,7 @@ class MVC{
 			if(isset($_SESSION['login'])){
             	if(!$_SESSION['login']){
           			echo "<script>window.location='index.php?action=login';</script>";  
+          			//header("Location: index.php?")
           			return false;
             	}else{
             		return true;
@@ -46,18 +47,91 @@ class MVC{
  public function showNav(){
     if(isset($_SESSION)){
       if(isset($_SESSION['login'])){
-         /* if($_SESSION['login']){
-            //verificar tipo de usuario: superadmin o empleado y mostrar el nav correspondiente
-          echo "
-          <h1><img src='view/assets/img/upv_logo.png' width='100' height='100' style='float:left'/></h1>
-          <ul class='right button-group'>
-          <li><a href='index.php?action=dashboard' class='button tiny'>Dashboard</a></li>
-          <li><a href='index.php?action=productos' class='button tiny'>Gestion de Productos</a></li>
-          <li><a href='index.php?action=logout' class='button tiny' style='background-color:red'>Log out</a></li>
-        </ul>";
-        }*/
-      }else{
-      	echo "<script>window.location='index.php?action=login';</script>";
+         if($_SESSION['login']){
+            //verificar si el usurio esta logueado se imprime el menu
+            echo "
+		            <!-- Navbar -->
+		  <nav class='main-header navbar navbar-expand bg-white navbar-light border-bottom'>
+		    <!-- Left navbar links -->
+		    <ul class='navbar-nav'>
+		      <li class='nav-item'>
+		        <a class='nav-link' data-widget='pushmenu'><i class='fa fa-bars'></i></a>
+		      </li>
+		      <li class='nav-item d-none d-sm-inline-block'>
+		        <a href='index.php' class='nav-link'>Home</a>
+		      </li>
+		      <li class='nav-item d-none d-sm-inline-block'>
+		        <a href='index.php?action=logout' class='nav-link'>Logout</a>
+		      </li>
+		    </ul>
+		    
+		  </nav>
+		  <!-- Main Sidebar Container -->
+		  <aside class='main-sidebar sidebar-dark-primary elevation-4'>
+		    <!-- Brand Logo -->
+		    <a href='index.php' class='brand-link'>
+		      <img src='view/dist/img/AdminLTELogo.png' alt='Logo' class='brand-image img-circle elevation-3'
+		           style='opacity: .8'>
+		      <span class='brand-text font-weight-light'>Inventarios</span>
+		    </a>
+
+		    <!-- Sidebar -->
+		    <div class='sidebar'>
+		      <!-- Sidebar user panel (optional) -->
+		      <div class='user-panel mt-3 pb-3 mb-3 d-flex'>
+		        <div class='image'>
+		          <img src='view/dist/img/boxed-bg.jpg' class='img-circle elevation-2' alt='User Image'>
+		        </div>
+		        <div class='info'>
+		          <a href='#' class='d-block'>"; $control = new MVC(); $control->mostrarInicioController(); echo "</a>
+		        </div>
+		      </div>
+
+		      <!-- Sidebar Menu -->
+		      <nav class='mt-2'>
+		        <ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
+		          <!-- Add icons to the links using the .nav-icon class
+		               with font-awesome or any other icon font library -->
+		          <li class='nav-item has-treeview menu-open'>
+		           <ul class='nav nav-treeview'>
+		              <li class='nav-item'>
+		                <a href='index.php' class='nav-link'>
+		                  <i class='nav-icon fa fa-dashboard'></i>
+		                  <p>Dashboard</p>
+		                </a>
+		              </li>
+		              <li class='nav-item'>
+		                <a href='index.php?action=categorias' class='nav-link'>
+		                  <i class='nav-icon fa fa-edit'></i>
+		                  <p>Gestion de Categorias</p>
+		                </a>
+		              </li>
+		              <li class='nav-item'>
+		                <a href='index.php?action=productos' class='nav-link'>
+		                  <i class='nav-icon fa fa-tree'></i>
+		                  <p>Gestion de Productos</p>
+		                </a>
+		              </li>
+		              <li class='nav-item'>
+		                <a href='index.php?action=usuarios' class='nav-link'>
+		                  <i class='fa fa-circle-o nav-icon'></i>
+		                  <p>Gestion de Usuarios</p>
+		                </a>
+		              </li>
+		            </ul>
+		          </li>
+		          
+		      </nav>
+		      <!-- /.sidebar-menu -->
+		    </div>
+		    <!-- /.sidebar -->
+		  </aside>
+		    <!-- Content Wrapper. Contains page content -->
+  <div class='content-wrapper'>
+            ";
+        }else{
+        	echo "<div>";
+        }
       }
 	}
   }
@@ -102,6 +176,26 @@ class MVC{
 				echo "<td>".$item['stock']."</td>";
           		echo "<td>"."<a class='btn btn-secondary' href=index.php?action=editar_producto&id=".$item['id'].">Modificar</a></td>";
 				echo "<td>"."<a class='btn btn-danger' href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
+        echo "</tr>";
+				
+			}
+		}
+		
+	}
+	//funcion encargada de crear una tabla con las categorias registrados en la base de datos
+	public function getCategoriasController(){
+		global $in;
+		//imprimir la varable que trae los datos del usuario
+		
+		$informacion = Crud::vistaXTablaModel("categorias");//ejecucion del metodo del modelo
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de las categorias
+			foreach ($informacion as $row => $item) {
+				echo "<tr>";
+				echo "<td>".$item['id']."</td>";
+				echo "<td>".$item['nombre']."</td>";
+          		echo "<td>"."<a class='btn btn-secondary' href=index.php?action=editar_categoria&id=".$item['id'].">Modificar</a></td>";
+				echo "<td>"."<a class='btn btn-danger' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
         echo "</tr>";
 				
 			}
@@ -294,6 +388,25 @@ class MVC{
 		}
 	}
 
+
+
+	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
+	public function registroCategoriaController(){
+		if(isset($_POST['btn_agregar'])){//verificar clic en el boton
+			//crear array con los datos a registrar tomados de los controles
+			$data = array('nombre'=> $_POST['nombre']
+					);
+			//peticion al modelo del reigstro del producto mandando como param la informacion de este
+			$registro = Crud::registroCategoriaModel($data);
+			if($registro == "success"){ //verificar la respuesta del modelo
+				echo "<script>window.location='index.php?action=categorias';</script>";
+			}else{
+				echo "<script>alert('Error al registrar la categoria')</script>";
+			}
+		}
+	}
+
+
 	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo (registro de maestros)
 	public function registroMaestroController(){
 		if(isset($_POST['btn_agregar'])){ //se verifica si se dio el clic 
@@ -449,6 +562,32 @@ class MVC{
 		}
 	}
 
+
+	//funcion encargada de, dado un id de una categoria, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
+	public function getCategoriaController(){
+		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
+		$peticion = Crud::getRegModel($id, 'categorias'); //peticion al modelo del registro especificado por el id
+		if(!empty($peticion)){
+			echo "
+				<div class='form-group'>
+                    <p>
+                    <label>Id</label>
+                    <input type='text' class='form-control' name='id' value='".$peticion['id']."' placeholder='' required='' readonly='true'>
+                  </p>
+                  </div>
+                  <div class='form-group'>
+                    <p>
+                    <label>Nombre</label>
+                    <input type='text' class='form-control' name='nombre' value='".$peticion['nombre']."' placeholder='Ingresa el nombre de la categoria' required=''>
+                  </p>
+                  </div>
+                  ";
+		}
+	}
+
+
+
+
 	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
 	public function actualizarProductoController(){
 		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
@@ -467,6 +606,25 @@ class MVC{
 			$peticion = Crud::actualizarProductoModel($data, $_POST['id']);
 			if($peticion == "success"){ //verificacion de la respuesta por el modelo
        echo "<script>window.location='index.php?action=productos';</script>";
+        
+			}else{
+				echo "<script>alert('Error al actualizar')</script>";
+			}
+		}
+	}
+
+	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
+	public function actualizarCategoriaController(){
+		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
+			//se toman los valores de los controles y se guardan en un array
+			$data = array(
+				"nombre"=>$_POST['nombre']
+			);
+
+			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
+			$peticion = Crud::actualizarCategoriaModel($data, $_POST['id']);
+			if($peticion == "success"){ //verificacion de la respuesta por el modelo
+       echo "<script>window.location='index.php?action=categorias';</script>";
         
 			}else{
 				echo "<script>alert('Error al actualizar')</script>";

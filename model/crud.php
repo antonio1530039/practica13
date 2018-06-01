@@ -42,6 +42,18 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
+	//metodo registroCategoriaModel: dado un arreglo asociativo de datos, se inserta en la tabla categorias los datos especificados
+	public function registroCategoriaModel($data){
+		$stmt = Conexion::conectar()->prepare("INSERT INTO categorias(nombre) VALUES(:nombre)");
+		//preparacion de parametros
+		$stmt->bindParam(":nombre", $data['nombre']);
+		if($stmt->execute()) //ejecucion
+			return "success"; //respuesta
+		else
+			return "error";
+		$stmt->close();
+	}
+
 	//metodo registroTutoriaModel: dado un arreglo asociativo de datos de una tutoria, se inserta en la tabla sesion_tutoria los datos mandados
   public function registroTutoriaModel($data){
 		$stmt = Conexion::conectar()->prepare("INSERT INTO sesion_tutoria(maestro, fecha, hora, tipo_tutoria, tutoria_informacion) VALUES(:maestro, :fecha, :hora, :tipo_tutoria, :tutoria_informacion)"); //se prepara la conexion con la sentencia SQL a ejecutar
@@ -148,6 +160,19 @@ class Crud extends Conexion{
 
 	}
 
+	//metodo actualizarCategoriaModel: dado un array de datos y un id de una categoria, se actualizan los datos de este con los datos mandados
+	public function actualizarCategoriaModel($data, $id){
+		$stmt = Conexion::conectar()->prepare("UPDATE categorias SET nombre=:nombre WHERE id = $id");
+		$stmt->bindParam(":nombre", $data['nombre']);
+		if($stmt->execute())
+			return "success";
+		else
+			return "error";
+		$stmt->close();
+
+
+	}
+
 	//metodo actualizarCarreraModel: dado un array de datos y un id de una carrera, se actualizan los datos de este con los datos mandados
 	public function actualizarCarreraModel($data, $id){
 		$stmt = Conexion::conectar()->prepare("UPDATE carreras SET nombre = :nombre WHERE id = $id");
@@ -181,7 +206,7 @@ class Crud extends Conexion{
 	//metodo borrarXModel: dado un id de un registro y un nombre de tabla se realiza la actualizacion del campo deleted en la base de datos de cualquier tabla existente
 	public function borrarXModel($id, $table){
 		//se define el nombre de la llave principal segun el nombre de la tabla especificado
-		if($table=="productos"){
+		if($table=="productos" || $table=="categorias"){
 			$idName = "id";
 		}
 		$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla

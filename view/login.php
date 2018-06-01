@@ -8,18 +8,18 @@
 <head>
   <title>Login</title>
 </head>
-<body>
+<body style="background-color:gray">
   <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
 <div class="login-box">
 
-  <div class="login-logo">
-    <b>Sistema de Control de Inventario</b>
-  </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
+      <div class="login-logo">
+    <b>Sistema de Control de Inventario</b>
+  </div>
       <p class="login-box-msg">Identificate para iniciar sesion</p>
       <form action="" method="post">
         <div class="form-group has-feedback">
@@ -42,6 +42,7 @@
 </div>
 </div>
 </div>
+
 </body>
 <!-- /.login-box -->
 

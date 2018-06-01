@@ -6,7 +6,7 @@
 	//se crea la instancia del controlador
 	$controller = new MVC();
 	//en base al tipo de eliminacion se define el nombre del campo que corresponde a su llave primaria
-	if($_GET['tipo']=='productos'){
+	if($_GET['tipo']=='productos' || $_GET['tipo']=='categorias'){
 		$pos = "id";
 	}
 	//se ejecuta el metodo borrar de la clase del controlador

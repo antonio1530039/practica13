@@ -1,8 +1,8 @@
 <?php
   //instancia de la clase controlador
-  $controller_productos = new MVC();
+  $controller_categorias = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_productos->verificarLoginController();
+  $controller_categorias->verificarLoginController();
 
 ?>
   <head>
@@ -14,12 +14,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Gestión de Productos</h1>
+            <h1 class="m-0 text-dark">Gestión de Categorias</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-              <li class="breadcrumb-item active">Gestión de Productos</li>
+              <li class="breadcrumb-item active">Gestión de Categorias</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -41,14 +41,13 @@
               <form role="form">
                 <div class="card-body">
                   <div class="form-group">
-                    <input type="button" class="btn btn-primary" name="btn_back" value="Registrar producto" onclick="window.location = 'index.php?action=registro_producto'" style="float: right;">
+                    <input type="button" class="btn btn-primary" name="btn_back" value="Registrar categoria" onclick="window.location = 'index.php?action=registro_categoria'" style="float: right;">
                     <br><br>
                   </div>
                   <div class="form-group">
-
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Listado de productos</h3>
+                        <h3 class="card-title">Listado de categorias</h3>
                       </div>
                     <div class="card-body p-0">
                       <br>
@@ -56,16 +55,13 @@
                       <thead>
                         <th>Id</th>
                         <th>Nombre</th>
-                        <th>Descripcion</th>
-                        <th>Precio unitario</th>
-                        <th>Stock</th>
                         <th></th>
                         <th></th>
                       </thead>
                       <tbody>
                         <?php 
                         //listado de productos
-                        $controller_productos->getProductosController(); 
+                        $controller_categorias->getCategoriasController(); 
                          ?>
                       </tbody>
                     </table>
@@ -75,9 +71,10 @@
               </form>
             </div>    
       <script>
+      	
         //funcion de confirmacion en js para confimar el borrado de un registro
         function confirmar(){
-          var x = confirm("Seguro que deseas borrrar el registro?");
+          var x = confirm("Seguro que deseas borrar el registro?");
           if(!x)
             event.preventDefault();
         }

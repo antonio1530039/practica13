@@ -45,20 +45,19 @@
                     <br><br>
                   </div>
                   <div class="form-group">
-
                     <div class="card">
                       <div class="card-header">
                         <h3 class="card-title">Listado de productos</h3>
                       </div>
                     <div class="card-body p-0">
                       <br>
-                    <table width="100%" id="example1" class="table table-bordered table-striped">
+                    <table width="100%" id="example1" class="table table-bordered table-striped form-control">
                       <thead>
                         <th>Id</th>
-                        <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Descripcion</th>
                         <th>Precio unitario</th>
+                        <th>Stock</th>
                         <th>Categoria</th>
                         <th>Fecha de registro</th>
                         <th>Stock</th>
@@ -75,24 +74,17 @@
                   </div>
                   </div>
                 </div>
-            </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
+              </form>
+            </div>    
       <script>
-        
         //funcion de confirmacion en js para confimar el borrado de un registro
         function confirmar(){
-          var x = confirm("Seguro que deseas borrar el registro?");
+          var x = confirm("Seguro que deseas borrrar el registro?");
           if(!x)
             event.preventDefault();
         }
 
       </script>
+    </div>
   </body>
 
