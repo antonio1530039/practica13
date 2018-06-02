@@ -60,9 +60,6 @@ class MVC{
 		      <li class='nav-item d-none d-sm-inline-block'>
 		        <a href='index.php' class='nav-link'>Home</a>
 		      </li>
-		      <li class='nav-item d-none d-sm-inline-block'>
-		        <a href='index.php?action=logout' class='nav-link'>Logout</a>
-		      </li>
 		    </ul>
 		    
 		  </nav>
@@ -101,21 +98,34 @@ class MVC{
 		                </a>
 		              </li>
 		              <li class='nav-item'>
+		                <a href='index.php?action=movimiento_inventario' class='nav-link'>
+		                  <i class='nav-icon fa fa-exchange'></i>
+		                  <p>Realizar movimiento</p>
+		                </a>
+		              </li>
+		              <li class='nav-item'>
 		                <a href='index.php?action=categorias' class='nav-link'>
-		                  <i class='nav-icon fa fa-edit'></i>
+		                  <i class='nav-icon fa fa-tags'></i>
 		                  <p>Gestion de Categorias</p>
 		                </a>
 		              </li>
 		              <li class='nav-item'>
 		                <a href='index.php?action=productos' class='nav-link'>
-		                  <i class='nav-icon fa fa-tree'></i>
+		                  <i class='nav-icon fa fa-cube'></i>
 		                  <p>Gestion de Productos</p>
 		                </a>
 		              </li>
 		              <li class='nav-item'>
 		                <a href='index.php?action=usuarios' class='nav-link'>
-		                  <i class='fa fa-circle-o nav-icon'></i>
+		                  <i class='nav-icon fa fa-users'></i>
 		                  <p>Gestion de Usuarios</p>
+		                </a>
+		              </li>
+
+		              <li class='nav-item'>
+		                <a href='index.php?action=logout' class='nav-link'>
+		                  <i class='nav-icon fa fa-sign-out'></i>
+		                  <p>Logout</p>
 		                </a>
 		              </li>
 		            </ul>
@@ -171,22 +181,46 @@ class MVC{
 				echo "<td>".$item['nombre']."</td>";
 				echo "<td>".$item['descripcion']."</td>";
 				echo "<td>".$item['precio_unitario']."</td>";
+				echo "<td>".$item['stock']."</td>";
 				echo "<td>".$categoria['nombre']."</td>";
 				echo "<td>".$item['fecha_registro']."</td>";
-				echo "<td>".$item['stock']."</td>";
-          		echo "<td>"."<a class='btn btn-secondary' href=index.php?action=editar_producto&id=".$item['id'].">Modificar</a></td>";
-				echo "<td>"."<a class='btn btn-danger' href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
+          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_producto&id=".$item['id']."></a></td>";
+				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
         echo "</tr>";
 				
 			}
 		}
 		
 	}
+
+	//funcion encargada de crear una tabla con los productos registrados en la base de datos
+	public function getHistorialProductos(){
+		$informacion = Crud::vistaXTablaModel("transaccion");//ejecucion del metodo del modelo
+
+		//	id	id_producto	id_usuario	cantidad	tipo	fecha	deleted
+
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de los productos
+			foreach ($informacion as $row => $item) {
+				$producto = Crud::getRegModel($item['id_producto'], "productos");
+				$usuario = Crud::getRegModel($item['id_usuario'], "usuarios");
+				echo "<tr>";
+				echo "<td>".$item['serie']."</td>";
+				echo "<td>".$producto['nombre']."</td>";
+				echo "<td>".$usuario['user']."</td>";
+				echo "<td>".$item['fecha']."</td>";
+				echo "<td>".$item['cantidad']."</td>";
+				echo "<td>".$item['tipo']."</td>";
+
+
+			}
+		}
+		
+	}
+
+
 	//funcion encargada de crear una tabla con las categorias registrados en la base de datos
 	public function getCategoriasController(){
-		global $in;
-		//imprimir la varable que trae los datos del usuario
-		
 		$informacion = Crud::vistaXTablaModel("categorias");//ejecucion del metodo del modelo
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de las categorias
@@ -194,9 +228,29 @@ class MVC{
 				echo "<tr>";
 				echo "<td>".$item['id']."</td>";
 				echo "<td>".$item['nombre']."</td>";
-          		echo "<td>"."<a class='btn btn-secondary' href=index.php?action=editar_categoria&id=".$item['id'].">Modificar</a></td>";
-				echo "<td>"."<a class='btn btn-danger' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'>Borrar</a></td>";
+          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_categoria&id=".$item['id']."></a></td>";
+				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
         echo "</tr>";
+				
+			}
+		}
+		
+	}
+
+	//funcion encargada de crear una tabla con los usuarios registrados en la base de datos
+	public function getUsuariosController(){
+		$informacion = Crud::vistaXTablaModel("usuarios");//ejecucion del metodo del modelo
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de los usuarios
+			foreach ($informacion as $row => $item) {
+				echo "<tr>";
+				echo "<td>".$item['id']."</td>";
+				echo "<td>".$item['user']."</td>";
+				//para no mostrar la contraseña en texto plano, utilizamos un metodo de encriptacion md5
+				echo "<td>".md5($item['password'])."</td>";
+          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_usuario&id=".$item['id']."></a></td>";
+				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']."class='button radius tiny warning' onclick='confirmar();'></a></td>";
+        		echo "</tr>";
 				
 			}
 		}
@@ -305,6 +359,18 @@ class MVC{
 		}
 	}
 
+	//funcion que crea un select con los productos registrados
+	public function getSelectForProductos(){
+		$informacion = Crud::vistaXTablaModel("productos"); //se obtienen todos las categorias de la bd mediante la conexion al modelo
+		if(!empty($informacion)){ 
+				foreach ($informacion as $row => $item) { //se imprimen los valores
+					echo "<option value='".$item['id']."'>".$item['codigo']. " | ".$item['nombre'] ." | " . $item['stock'] . "</option>";
+				}
+			
+			
+		}
+	}
+
 	//funcion que crea un select con los maestros registrados
 	public function getSelectForMaestros($firstID){
 		$informacion = Crud::vistaXTablaModel("maestros"); //se obtienen todos los maestros de la bd mediante la conexion al modelo
@@ -389,6 +455,35 @@ class MVC{
 	}
 
 
+	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
+	public function registroHistorialController(){
+		if(isset($_POST['btn_movimiento_entrada']) || isset($_POST['btn_movimiento_salida'])   ){//verificar clic en el boton
+			
+			//verificar de que tipo fue el movimiento
+			if(isset($_POST['btn_movimiento_entrada'])){
+				$tipo = "Entrada";
+			}else if(isset($_POST['btn_movimiento_salida'])){
+				$tipo = "Salida";
+			}
+			//crear array con los datos a registrar tomados de los controles
+			$data = array('id_producto'=> $_POST['producto'],
+						'cantidad'=> $_POST['cantidad'],
+						'id_usuario'=> $_SESSION['user_info']['id'],
+						'fecha'=> date("Y-m-d"),
+						'tipo'=> $tipo,
+						'serie'=> $_POST['codigo_control'],
+					);
+			//peticion al modelo del reigstro del producto mandando como param la informacion de este
+			$registro = Crud::registroHistorialModel($data);
+			if($registro == "success"){ //verificar la respuesta del modelo
+				echo "<script>window.location='index.php?action=movimiento_inventario';</script>";
+			}else{
+				echo "<script>alert('Error al registrar el movimiento')</script>";
+			}
+		}
+	}
+
+
 
 	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
 	public function registroCategoriaController(){
@@ -402,6 +497,23 @@ class MVC{
 				echo "<script>window.location='index.php?action=categorias';</script>";
 			}else{
 				echo "<script>alert('Error al registrar la categoria')</script>";
+			}
+		}
+	}
+
+	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
+	public function registroUsuarioController(){
+		if(isset($_POST['btn_agregar'])){//verificar clic en el boton
+			//crear array con los datos a registrar tomados de los controles
+			$data = array('username'=> $_POST['username'],
+				'password'=> $_POST['password'],
+					);
+			//peticion al modelo del reigstro del producto mandando como param la informacion de este
+			$registro = Crud::registroUsuarioModel($data);
+			if($registro == "success"){ //verificar la respuesta del modelo
+				echo "<script>window.location='index.php?action=usuarios';</script>";
+			}else{
+				echo "<script>alert('Error al registrar el usuario')</script>";
 			}
 		}
 	}
@@ -585,6 +697,28 @@ class MVC{
 		}
 	}
 
+	//funcion encargada de, dado un id de un usuario, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
+	public function getUsuarioController(){
+		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
+		$peticion = Crud::getRegModel($id, 'usuarios'); //peticion al modelo del registro especificado por el id
+		if(!empty($peticion)){
+			echo "
+					<div class='form-group'>
+                    <label>Id</label>
+                    <input type='text' class='form-control' name='id' value='".$peticion["id"]."' placeholder='Ingresa el username del usuario' required='' readonly='true'>
+                  </div>
+				<div class='form-group'>
+                    <label>Username</label>
+                    <input type='text' class='form-control' name='username' value='".$peticion["user"]."' placeholder='Ingresa el username del usuario' required=''>
+                  </div>
+                  <div class='form-group'>
+                    <label>Password</label>
+                    <input type='text' class='form-control' name='password' value='".$peticion["password"]."' placeholder='Ingresa la contraseña del usuario' required=''>
+                  </div>
+                  ";
+		}
+	}
+
 
 
 
@@ -606,6 +740,26 @@ class MVC{
 			$peticion = Crud::actualizarProductoModel($data, $_POST['id']);
 			if($peticion == "success"){ //verificacion de la respuesta por el modelo
        echo "<script>window.location='index.php?action=productos';</script>";
+        
+			}else{
+				echo "<script>alert('Error al actualizar')</script>";
+			}
+		}
+	}
+
+	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
+	public function actualizarUsuarioController(){
+		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
+			//se toman los valores de los controles y se guardan en un array
+			$data = array(
+				"username"=>$_POST['username'],
+				"password"=>$_POST['password']
+			);
+
+			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
+			$peticion = Crud::actualizarUsuarioModel($data, $_POST['id']);
+			if($peticion == "success"){ //verificacion de la respuesta por el modelo
+       echo "<script>window.location='index.php?action=usuarios';</script>";
         
 			}else{
 				echo "<script>alert('Error al actualizar')</script>";

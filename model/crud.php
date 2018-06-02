@@ -42,6 +42,40 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
+	//metodo registroHistorialModel: dado un arreglo asociativo de datos, se inserta en la tabla productos los datos especificados
+	public function registroHistorialModel($data){
+		//id	id_producto	id_usuario	cantidad	tipo	fecha	deleted
+		$stmt = Conexion::conectar()->prepare("INSERT INTO transaccion(id_producto, id_usuario, cantidad, tipo, fecha, serie) VALUES(:id_producto, :id_usuario, :cantidad, :tipo, :fecha, :serie)");
+		//preparacion de parametros
+		$stmt->bindParam(":id_producto", $data['id_producto']);
+		$stmt->bindParam(":id_usuario", $data['id_usuario']);
+		$stmt->bindParam(":cantidad", $data['cantidad']);
+		$stmt->bindParam(":tipo", $data['tipo']);
+		$stmt->bindParam(":fecha", $data['fecha']);
+		$stmt->bindParam(":serie", $data['serie']);
+		
+		if($stmt->execute()) {//ejecucion
+			//actualizar el producto segun la cantidad ingresada
+			if($data['tipo']=="Entrada"){
+				$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock + :cantidad WHERE id = :id_producto"); //preparar la consulta
+			}else{
+				$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock - :cantidad WHERE id = :id_producto"); //preparar la consulta
+			}
+			$stmt->bindParam(":id_producto", $data['id_producto']); //colocar parametros
+			$stmt->bindParam(":cantidad", $data['cantidad']); //colocar parametros
+			if($stmt->execute()){ //ejecutar la consulta
+				return "success"; //respuesta final
+			}else{
+				return "error";
+			}
+
+			
+		}
+		else
+			return "error";
+		$stmt->close();
+	}
+
 	//metodo registroCategoriaModel: dado un arreglo asociativo de datos, se inserta en la tabla categorias los datos especificados
 	public function registroCategoriaModel($data){
 		$stmt = Conexion::conectar()->prepare("INSERT INTO categorias(nombre) VALUES(:nombre)");
@@ -54,64 +88,14 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
-	//metodo registroTutoriaModel: dado un arreglo asociativo de datos de una tutoria, se inserta en la tabla sesion_tutoria los datos mandados
-  public function registroTutoriaModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO sesion_tutoria(maestro, fecha, hora, tipo_tutoria, tutoria_informacion) VALUES(:maestro, :fecha, :hora, :tipo_tutoria, :tutoria_informacion)"); //se prepara la conexion con la sentencia SQL a ejecutar
-		//preparacion de los parametros
-		$stmt->bindParam(":maestro", $data['maestro']);
-		$stmt->bindParam(":fecha", $data['fecha']);
-		$stmt->bindParam(":hora", $data['hora']);
-    $stmt->bindParam(":tipo_tutoria", $data['tipo']);
-    $stmt->bindParam(":tutoria_informacion", $data['info']);
-		if($stmt->execute()) //ejecucion de la consulta
-			return "success";
-		else
-			return "error";
-		$stmt->close();
-	}
-  //metodo que inserta un alumno en la tabla tutoria_alumnos
-   public function registroAlumnoTutoria($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO tutoria_alumnos(tutoria, matricula) VALUES(:id_tutoria, :matricula_alumno)"); //se prepara la conexion
+	//metodo registroUsuarioModel: dado un arreglo asociativo de datos, se inserta en la tabla usuarios los datos especificados
+	public function registroUsuarioModel($data){
+		$stmt = Conexion::conectar()->prepare("INSERT INTO usuarios(user,password) VALUES(:username, :password)");
 		//preparacion de parametros
-		$stmt->bindParam(":id_tutoria", $data['id_tutoria']);
-		$stmt->bindParam(":matricula_alumno", $data['matricula_alumno']);
-		return $stmt->execute(); //ejecucion de la consulta
-		$stmt->close();
-	}
-  
-  //metodo que retorna el id de la ultima tutoria insertada en la bd
-  public function returnLastTutoria(){
-		$stmt = Conexion::conectar()->prepare("SELECT MAX(id) FROM sesion_tutoria"); //conslta sql
-		if($stmt->execute()) //ejecucion
-			return $stmt->fetch(); //retorno de resultado
-		else
-			return "error";
-		$stmt->close();
-	}
-  
-  	//metodo registroMaestroModel: dado un arreglo asociativo de datos de un maestro, se inserta en la tabla maestros, la informacion especificada
-	public function registroMaestroModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO maestros(numero_empleado, nombre, carrera, email, password, superadmin) VALUES(:numero, :nombre, :carrera, :correo, :password, :tipo)"); //se prepara la conexion con la consulta sql
-		//se asocian los parametros de la consulta sql
-		$stmt->bindParam(":numero", $data['numero_empleado']);
-		$stmt->bindParam(":nombre", $data['nombre']);
-		$stmt->bindParam(":carrera", $data['carrera']);
-		$stmt->bindParam(":correo", $data['correo']);
+		$stmt->bindParam(":username", $data['username']);
 		$stmt->bindParam(":password", $data['password']);
-    $stmt->bindParam(":tipo", $data['superadmin']);
-		if($stmt->execute()) //ejecucion de la consulta
-			return "success"; //retornar respuesta
-		else
-			return "error";
-		$stmt->close();
-	}
-
-	//metodo registroCarreraModel: dado un arreglo de datos de una carra, se inserta en la tabla carreras los datos especificados o mandados
-	public function registroCarreraModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO carreras(nombre) VALUES(:nombre)");
-		$stmt->bindParam(":nombre", $data['nombre']);
-		if($stmt->execute())
-			return "success"; //retorno de respuesta
+		if($stmt->execute()) //ejecucion
+			return "success"; //respuesta
 		else
 			return "error";
 		$stmt->close();
@@ -173,27 +157,11 @@ class Crud extends Conexion{
 
 	}
 
-	//metodo actualizarCarreraModel: dado un array de datos y un id de una carrera, se actualizan los datos de este con los datos mandados
-	public function actualizarCarreraModel($data, $id){
-		$stmt = Conexion::conectar()->prepare("UPDATE carreras SET nombre = :nombre WHERE id = $id");
-		$stmt->bindParam(":nombre", $data['nombre']);
-		if($stmt->execute())
-			return "success";
-		else
-			return "error";
-		$stmt->close();
-
-
-	}
-
-	//metodo actualizarMaestroModel: dado un array de datos y un id de un maestro, se actualizan los datos de este con los datos mandados
-	public function actualizarMaestroModel($data, $id){
-		$stmt = Conexion::conectar()->prepare("UPDATE maestros SET nombre = :nombre, carrera = :carrera, email = :correo, password = :password, superadmin = :tipo WHERE numero_empleado = '$id'");
-		$stmt->bindParam(":nombre", $data['nombre']);
-		$stmt->bindParam(":carrera", $data['carrera']);
-		$stmt->bindParam(":correo", $data['correo']);
+	//metodo actualizarUsuarioModel: dado un array de datos y un id de un usuario, se actualizan los datos de este con los datos mandados
+	public function actualizarUsuarioModel($data, $id){
+		$stmt = Conexion::conectar()->prepare("UPDATE usuarios SET user=:username, password=:password WHERE id = $id");
+		$stmt->bindParam(":username", $data['username']);
 		$stmt->bindParam(":password", $data['password']);
-    $stmt->bindParam(":tipo", $data['superadmin']);
 		if($stmt->execute())
 			return "success";
 		else
@@ -206,17 +174,27 @@ class Crud extends Conexion{
 	//metodo borrarXModel: dado un id de un registro y un nombre de tabla se realiza la actualizacion del campo deleted en la base de datos de cualquier tabla existente
 	public function borrarXModel($id, $table){
 		//se define el nombre de la llave principal segun el nombre de la tabla especificado
-		if($table=="productos" || $table=="categorias"){
+		if($table=="productos" || $table=="categorias" || $table=="usuarios"){
 			$idName = "id";
 		}
-		$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
-		$stmt->bindParam(":id",$id); //se asocia el parametro indicado
-		
+		if($table == "categorias"){//borrar los productos tambien (borrado logico)
+			$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+			$stmt->execute();
+
+			$stmt = Conexion::conectar()->prepare("UPDATE productos SET deleted=1 WHERE id_categoria = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+			//$stmt->execute();
+		}else{
+			$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+		}
 		if($stmt->execute()){ //se ejecuta la consulta
 			return "success"; //se retorna la respuesta
 		}else{
 			return "error";
 		}
+
 		$stmt->close();
 	}
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-05-2018 a las 11:08:33
+-- Tiempo de generación: 02-06-2018 a las 09:45:12
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.9
 
@@ -39,9 +39,10 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`, `deleted`) VALUES
-(1, 'Lacteos', 0),
+(1, 'Abarrotes', 0),
 (2, 'Herramientas', 0),
-(3, 'Refrescos', 0);
+(3, 'Refrescos', 0),
+(4, 'CAT2EDx', 0);
 
 -- --------------------------------------------------------
 
@@ -61,6 +62,15 @@ CREATE TABLE `productos` (
   `deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `codigo`, `nombre`, `descripcion`, `precio_unitario`, `stock`, `id_categoria`, `fecha_registro`, `deleted`) VALUES
+(6, 'co1', 'Coca cola 600 ml', 'Refresco', '10.00', 300, 2, '2018-05-31', 0),
+(7, 'co324', 'Silla', 'De madera', '500.70', 20, 2, '2018-05-31', 0),
+(8, 'co1021', 'ProductTest', 'TestDesc', '100.00', 2, 1, '2018-06-02', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -74,8 +84,18 @@ CREATE TABLE `transaccion` (
   `cantidad` int(11) NOT NULL,
   `tipo` varchar(100) NOT NULL,
   `fecha` date NOT NULL,
+  `serie` varchar(50) NOT NULL,
   `deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `transaccion`
+--
+
+INSERT INTO `transaccion` (`id`, `id_producto`, `id_usuario`, `cantidad`, `tipo`, `fecha`, `serie`, `deleted`) VALUES
+(16, 6, 2, 30, 'Entrada', '2018-06-02', '1232', 0),
+(17, 6, 2, 20, 'Entrada', '2018-06-02', '230', 0),
+(18, 7, 2, 20, 'Salida', '2018-06-02', '01203', 0);
 
 -- --------------------------------------------------------
 
@@ -95,7 +115,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `user`, `password`, `deleted`) VALUES
-(1, 'jose', 'jose', 0);
+(1, 'jose', 'jose', 0),
+(2, 'mario', 'mario', 0);
 
 --
 -- Índices para tablas volcadas
@@ -136,25 +157,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `transaccion`
 --
 ALTER TABLE `transaccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

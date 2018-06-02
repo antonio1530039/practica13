@@ -87,6 +87,13 @@
 <script src="view/plugins/select2/select2.full.min.js"></script>
 
 <script type="text/javascript">
+     //funcion de confirmacion en js para confimar el borrado de un registro
+        function confirmar(){
+          var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+          var x = prompt("Ingresa tu contraseña para confirmar");
+          if(x != ps)
+            event.preventDefault();
+        }
 
       //necesario para mostrar dataTables
           $(function () {

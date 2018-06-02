@@ -65,7 +65,7 @@
                   <div class="form-group">
                     <p>
                     <label>Categoria</label>
-                    <select class="form-control select2" name="categoria">
+                    <select class="form-control select2" name="categoria" required="">
                       <?php $controller_productos->getSelectForCategorias(""); ?>
                     </select>
                   </p>
