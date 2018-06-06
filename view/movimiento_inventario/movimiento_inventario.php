@@ -42,7 +42,7 @@
                         <h3 class="card-title">Ingreso o salida de productos</h3>
                       </div>
                     <div class="card-body p-0">
-                      <center><img src='view/dist/img/box.png' width="200" height="200" alt='User Image'></center>
+                      <center><img src='view/dist/img/Box.png' width="200" height="200" alt='Imagen de producto'></center>
                     <br>
                     <div class="container row">
 
