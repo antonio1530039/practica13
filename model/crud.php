@@ -45,34 +45,45 @@ class Crud extends Conexion{
 	//metodo registroHistorialModel: dado un arreglo asociativo de datos, se inserta en la tabla productos los datos especificados
 	public function registroHistorialModel($data){
 		//id	id_producto	id_usuario	cantidad	tipo	fecha	deleted
-		$stmt = Conexion::conectar()->prepare("INSERT INTO transaccion(id_producto, id_usuario, cantidad, tipo, fecha, serie) VALUES(:id_producto, :id_usuario, :cantidad, :tipo, :fecha, :serie)");
-		//preparacion de parametros
-		$stmt->bindParam(":id_producto", $data['id_producto']);
-		$stmt->bindParam(":id_usuario", $data['id_usuario']);
-		$stmt->bindParam(":cantidad", $data['cantidad']);
-		$stmt->bindParam(":tipo", $data['tipo']);
-		$stmt->bindParam(":fecha", $data['fecha']);
-		$stmt->bindParam(":serie", $data['serie']);
-		
-		if($stmt->execute()) {//ejecucion
-			//actualizar el producto segun la cantidad ingresada
-			if($data['tipo']=="Entrada"){
-				$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock + :cantidad WHERE id = :id_producto"); //preparar la consulta
-			}else{
-				$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock - :cantidad WHERE id = :id_producto"); //preparar la consulta
+		//verificar si existe stock
+		$stmt = Conexion::conectar()->prepare("SELECT stock - :cant FROM productos WHERE id = :id_producto");
+		$stmt->bindParam(":cant", $data['cantidad']);
+		$stmt->bindParam(":id_producto", $data['id_producto']); //colocar parametros
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		if($result[0][0] >= 0 || $data['tipo'] == "Entrada"){
+			$stmt = Conexion::conectar()->prepare("INSERT INTO transaccion(id_producto, id_usuario, cantidad, tipo, fecha, serie) VALUES(:id_producto, :id_usuario, :cantidad, :tipo, :fecha, :serie)");
+			//preparacion de parametros
+			$stmt->bindParam(":id_producto", $data['id_producto']);
+			$stmt->bindParam(":id_usuario", $data['id_usuario']);
+			$stmt->bindParam(":cantidad", $data['cantidad']);
+			$stmt->bindParam(":tipo", $data['tipo']);
+			$stmt->bindParam(":fecha", $data['fecha']);
+			$stmt->bindParam(":serie", $data['serie']);
+			
+			if($stmt->execute()) {//ejecucion
+				//actualizar el producto segun la cantidad ingresada
+				if($data['tipo']=="Entrada"){
+					$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock + :cantidad WHERE id = :id_producto"); //preparar la consulta
+				}else{
+					$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock - :cantidad WHERE id = :id_producto"); //preparar la consulta
+				}
+				$stmt->bindParam(":id_producto", $data['id_producto']); //colocar parametros
+				$stmt->bindParam(":cantidad", $data['cantidad']); //colocar parametros
+				if($stmt->execute()){ //ejecutar la consulta
+					return "success"; //respuesta final
+				}else{
+					return "error";
+				}
+
+				
 			}
-			$stmt->bindParam(":id_producto", $data['id_producto']); //colocar parametros
-			$stmt->bindParam(":cantidad", $data['cantidad']); //colocar parametros
-			if($stmt->execute()){ //ejecutar la consulta
-				return "success"; //respuesta final
-			}else{
+			else{
 				return "error";
 			}
-
-			
+		}else{
+			return "nostock";
 		}
-		else
-			return "error";
 		$stmt->close();
 	}
 
@@ -90,10 +101,11 @@ class Crud extends Conexion{
 
 	//metodo registroUsuarioModel: dado un arreglo asociativo de datos, se inserta en la tabla usuarios los datos especificados
 	public function registroUsuarioModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO usuarios(user,password) VALUES(:username, :password)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO usuarios(user,password,fecha_registro) VALUES(:username, :password, :fecha)");
 		//preparacion de parametros
 		$stmt->bindParam(":username", $data['username']);
 		$stmt->bindParam(":password", $data['password']);
+		$stmt->bindParam(":fecha", $data['fecha_registro']);
 		if($stmt->execute()) //ejecucion
 			return "success"; //respuesta
 		else

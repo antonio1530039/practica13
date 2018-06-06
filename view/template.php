@@ -95,6 +95,13 @@
             event.preventDefault();
         }
 
+      //funcion de confirmacion en js para confimar el borrado de un registro
+        function confirmLogout(){
+          var x = confirm("¿Seguro que quieres cerrar sesión?");
+          if(!x)
+            event.preventDefault();
+        }
+
       //necesario para mostrar dataTables
           $(function () {
             $('.select2').select2();

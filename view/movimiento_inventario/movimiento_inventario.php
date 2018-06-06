@@ -61,7 +61,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text">Unidades</span>
                             </div>
-                            <input type="number" step="1"  class="form-control" name="cantidad" required="">
+                            <input type="number" step="1"  min="1"  class="form-control" name="cantidad" required="">
                             <div class="input-group-append">
                               <span class="input-group-text"></span>
                             </div>
@@ -71,13 +71,13 @@
 
                       
                     </div>
-                    <input type="number" step="1"  class="form-control" name="codigo_control" required="" placeholder="Numero de control">
+                    <input type="number" step="1" class="form-control" name="codigo_control" required="" placeholder="Numero de control">
                   </div>
 
                   <div class="container">
                     <center><br>
-                          <input type="submit" name="btn_movimiento_entrada" class="btn btn-success" value="Entrada">
-                          <input type="submit" name="btn_movimiento_salida" class="btn btn-danger" value="Salida">
+                          <input type="submit" name="btn_movimiento_entrada"  class="btn btn-success" value="Entrada">
+                          <input type="submit" name="btn_movimiento_salida"  class="btn btn-danger" value="Salida">
                     </center><br>
                   </div>
                 </div>
@@ -96,16 +96,16 @@
                     <br>
                     <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
-                        <th>Numero</th>
+                        <th>Num</th>
                         <th>Producto</th>
-                        <th>Usuario</th>
+                        <th>User</th>
                         <th>Fecha</th>
-                        <th>Cantidad</th>
+                        <th>Cant</th>
                         <th>Tipo</th>
                       </thead>
                       <tbody>
                         <?php 
-                        //listado de productos
+                        //listado del historial de productos
                         $controller_inventario->getHistorialProductos(); 
                          ?>
                       </tbody>

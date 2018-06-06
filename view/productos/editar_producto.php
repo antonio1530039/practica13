@@ -38,24 +38,10 @@
         <form role="form" method="post">
         <div class="row">
           <!-- left column -->
-          <div class="col-sm-12">
-            <!-- general form elements -->
-            <div class="card card-primary">
-               <div class="card-header">
-                        <h3 class="card-title">Realice los cambios correspondientes y de clic en guardar</h3>
-                </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-                <div class="card-body login-card-body">
+           
                     <?php $controller_productos->getProductoController() ?>
-                   <input type="submit" name="btn_actualizar" value="Guardar cambios" class="btn btn-success" onclick="confirmar();" style="float: right;">
-            
-               
-              </div>   
-            </div>
-            </div> 
                 
-              </div>
+            </div>
 </div>
 </section>
   </body>

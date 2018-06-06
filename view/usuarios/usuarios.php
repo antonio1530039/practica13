@@ -56,6 +56,7 @@
                         <th>Id</th>
                         <th>Username</th>
                         <th>Password</th>
+                        <th>Fecha de registro</th>
                         <th></th>
                         <th></th>
                       </thead>

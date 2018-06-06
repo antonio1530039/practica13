@@ -35,7 +35,7 @@
         <form role="form" method="post">
         <div class="row">
           <!-- left column -->
-          <div class="col-sm-12">
+          <div class="col-sm-6">
             <!-- general form elements -->
             <div class="card card-primary">
                <div class="card-header">
@@ -62,6 +62,22 @@
                     <input type="text" class="form-control" name="descripcion" placeholder="Ingresa la descripcion del producto" required="">
                   </p>
                   </div>
+               
+            </div>   
+            </div>
+            <!-- -->
+            </div> 
+
+
+
+
+            <!-- left column -->
+          <div class="col-sm-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <!-- /.card-header -->
+              <!-- form start -->
+                <div class="card-body login-card-body">
                   <div class="form-group">
                     <p>
                     <label>Categoria</label>
@@ -94,6 +110,7 @@
                       </div>
                     </div>
                   </div>
+                  <br>
                   
                    <input type="submit" name="btn_agregar" value="Registrar" class="btn btn-success" style="float: right;">
             
@@ -102,8 +119,10 @@
             </div>
             <!-- -->
             </div> 
+
+
                 
-              </div>
+            </div><!-- end row-->
 </div>
 </div>
   </form>
