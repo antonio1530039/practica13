@@ -43,7 +43,7 @@
         <div class="row">
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-info">
+            <div class="small-box bg-danger">
               <div class="inner">
                 <h3><?php echo $controller_dashboard->setQueryControllerGetNumber("productos", "stock", "<=",0); ?></h3>
 
@@ -86,7 +86,7 @@
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-danger">
+            <div class="small-box bg-info">
               <div class="inner">
                 <h3><?php echo $controller_dashboard->setQueryControllerGetNumber("categorias", "deleted", "=",0); ?></h3>
 
