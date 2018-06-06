@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2018 a las 08:46:48
+-- Tiempo de generación: 06-06-2018 a las 17:17:44
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.9
 
@@ -42,7 +42,7 @@ INSERT INTO `categorias` (`id`, `nombre`, `deleted`) VALUES
 (1, 'Abarrotes', 0),
 (2, 'Herramientas', 0),
 (3, 'Refrescos', 0),
-(4, 'CAT2EDx', 0);
+(4, 'CAT2EDx', 1);
 
 -- --------------------------------------------------------
 
@@ -69,8 +69,7 @@ CREATE TABLE `productos` (
 INSERT INTO `productos` (`id`, `codigo`, `nombre`, `descripcion`, `precio_unitario`, `stock`, `id_categoria`, `fecha_registro`, `deleted`) VALUES
 (6, 'co1', 'Coca cola 600 ml', 'Refresco', '10.00', 0, 2, '2018-05-31', 0),
 (7, 'co324', 'Silla', 'De madera', '500.70', 10, 2, '2018-05-31', 0),
-(8, 'co1021', 'ProductTest', 'TestDesc', '100.00', 2, 1, '2018-06-02', 0),
-(10, '019239121', 'Cabeza humana', 'Cabeza humana para barbacoa', '500.50', 1000, 2, '2018-06-05', 0);
+(8, 'co1021', 'ProductTest', 'TestDesc', '100.00', 2, 1, '2018-06-02', 0);
 
 -- --------------------------------------------------------
 
@@ -96,7 +95,10 @@ CREATE TABLE `transaccion` (
 INSERT INTO `transaccion` (`id`, `id_producto`, `id_usuario`, `cantidad`, `tipo`, `fecha`, `serie`, `deleted`) VALUES
 (57, 6, 1, 10, 'Salida', '2018-06-05', '213123', 0),
 (58, 6, 1, 1, 'Entrada', '2018-06-05', '121', 0),
-(59, 6, 1, 1, 'Salida', '2018-06-05', '888', 0);
+(59, 6, 1, 1, 'Salida', '2018-06-05', '888', 0),
+(60, 6, 2, 10, 'Entrada', '2018-06-06', '102011', 0),
+(61, 6, 2, 5, 'Salida', '2018-06-06', '2131', 0),
+(62, 6, 2, 5, 'Salida', '2018-06-06', '2131', 0);
 
 -- --------------------------------------------------------
 
@@ -119,7 +121,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `user`, `password`, `fecha_registro`, `deleted`) VALUES
 (1, 'jose', 'jose', '2018-06-04', 0),
 (2, 'mario', 'mario', '2018-06-04', 0),
-(3, 'adolf', 'adolf', '2018-06-05', 0);
+(3, 'adolf', 'adolf', '2018-06-05', 1);
 
 --
 -- Índices para tablas volcadas
@@ -172,7 +174,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `transaccion`
 --
 ALTER TABLE `transaccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
