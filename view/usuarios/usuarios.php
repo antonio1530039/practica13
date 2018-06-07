@@ -63,7 +63,7 @@
                       <tbody>
                         <?php 
                         //listado de usuarios
-                        $controller_usuarios->getUsuariosController(); 
+                        $controller_usuarios->getUsuariosController($_SESSION['user_info']['id']); 
                          ?>
                       </tbody>
                     </table>

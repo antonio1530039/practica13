@@ -185,7 +185,9 @@ class MVC{
 				echo "<td>".$categoria['nombre']."</td>";
 				echo "<td>".$item['fecha_registro']."</td>";
           		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_producto&id=".$item['id']."></a></td>";
-				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']."  class='button radius tiny warning' onclick='confirmar();'></a></td>";
+				//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']."  class='button radius tiny warning' onclick='confirmar();'></a></td>";
+        echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=productos&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+           
         echo "</tr>";
 				
 			}
@@ -227,7 +229,9 @@ class MVC{
 				echo "<td>".$item['id']."</td>";
 				echo "<td>".$item['nombre']."</td>";
           		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_categoria&id=".$item['id']."></a></td>";
-				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+				//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+       echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=categorias&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+           
         echo "</tr>";
 				
 			}
@@ -236,22 +240,44 @@ class MVC{
 	}
 
 	//funcion encargada de crear una tabla con los usuarios registrados en la base de datos
-	public function getUsuariosController(){
+	public function getUsuariosController($idUser){
 		$informacion = Crud::vistaXTablaModel("usuarios");//ejecucion del metodo del modelo
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de los usuarios
-			foreach ($informacion as $row => $item) {
-				echo "<tr>";
-				echo "<td>".$item['id']."</td>";
-				echo "<td>".$item['user']."</td>";
-				//para no mostrar la contraseña en texto plano, utilizamos un metodo de encriptacion md5
-				echo "<td>".md5($item['password'])."</td>";
-				echo "<td>".$item['fecha_registro']."</td>";
-          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_usuario&id=".$item['id']."></a></td>";
-				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']."class='button radius tiny warning' onclick='confirmar();'></a></td>";
-        		echo "</tr>";
-				
+      if(empty($idUser)){
+          foreach ($informacion as $row => $item) {
+          echo "<tr>";
+          echo "<td>".$item['id']."</td>";
+          echo "<td>".$item['user']."</td>";
+          //para no mostrar la contraseña en texto plano, utilizamos un metodo de encriptacion md5
+          echo "<td>".md5($item['password'])."</td>";
+          echo "<td>".$item['fecha_registro']."</td>";
+                echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_usuario&id=".$item['id']."></a></td>";
+          echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+
+            echo "</tr>";
+
+        }
+      }else{
+        foreach ($informacion as $row => $item) {
+          if($item['id']!=$idUser){
+            echo "<tr>";
+          echo "<td>".$item['id']."</td>";
+          echo "<td>".$item['user']."</td>";
+          //para no mostrar la contraseña en texto plano, utilizamos un metodo de encriptacion md5
+          echo "<td>".md5($item['password'])."</td>";
+          echo "<td>".$item['fecha_registro']."</td>";
+               echo "<td>"."<a class='btn btn-secondary fa fa-edit' href='index.php?action=editar_usuario&id=".$item['id']."'></a></td>";
+           
+            //echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+            echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=usuarios&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+            echo "</tr>";
+          }
+          
+
 			}
+      }
+			
 		}
 		
 	}

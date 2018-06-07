@@ -54,7 +54,7 @@
                   <div class="form-group">
                     <p>
                     <label>Password</label>
-                    <input type="text" class="form-control" name="password" placeholder="Ingresa la contraseña del usuario" required="">
+                    <input type="password" class="form-control" name="password" placeholder="Ingresa la contraseña del usuario" required="">
                   </p>
                   </div>
                    <input type="submit" name="btn_agregar" value="Registrar" class="btn btn-success" style="float: right;">
