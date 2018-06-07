@@ -13,7 +13,7 @@
 
 
 <head>
-    <title>Modificación de producto</title>
+    <title>Modificación de categoria</title>
   </head>
   <body class="hold-transition login-page">
 <!-- Content Header (Page header) -->

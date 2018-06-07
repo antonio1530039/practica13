@@ -190,23 +190,27 @@ class Crud extends Conexion{
 			$idName = "id";
 		}
 		if($table == "categorias"){//borrar los productos tambien (borrado logico)
-			$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
-			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
-			$stmt->execute();
+			$stmt1 = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt1->bindParam(":id",$id); //se asocia el parametro indicado
+			$stmt1->execute();
 
-			$stmt = Conexion::conectar()->prepare("UPDATE productos SET deleted=1 WHERE id_categoria = :id"); //actualizar a 1 el campo deleted de la tabla
-			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+			$stmt1 = Conexion::conectar()->prepare("UPDATE productos SET deleted=1 WHERE id_categoria = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt1->bindParam(":id",$id); //se asocia el parametro indicado
 			//$stmt->execute();
+			if($stmt1->execute()){ //se ejecuta la consulta
+				return "success"; //se retorna la respuesta
+			}else{
+				return "error";
+			}
 		}else{
-			$stmt = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
-			$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+			$stmt2 = Conexion::conectar()->prepare("UPDATE $table SET deleted=1 WHERE $idName = :id"); //actualizar a 1 el campo deleted de la tabla
+			$stmt2->bindParam(":id",$id); //se asocia el parametro indicado
+			if($stmt2->execute()){ //se ejecuta la consulta
+				return "success"; //se retorna la respuesta
+			}else{
+				return "error";
+			}
 		}
-		if($stmt->execute()){ //se ejecuta la consulta
-			return "success"; //se retorna la respuesta
-		}else{
-			return "error";
-		}
-
 		$stmt->close();
 	}
 

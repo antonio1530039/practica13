@@ -23,7 +23,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-              <li class="breadcrumb-item active"><a href="index.php?action=productos"> Gestión de Categorias</a></li>
+              <li class="breadcrumb-item active"><a href="index.php?action=categorias"> Gestión de Categorias</a></li>
               <li class="breadcrumb-item active">Registro de categoria</li>
             </ol>
           </div><!-- /.col -->

@@ -6,7 +6,7 @@
 
 ?>
   <head>
-    <title>Gestion de Productos</title>
+    <title>Gestion de Usuarios</title>
   </head>
   <body>
   <!-- Content Header (Page header) -->

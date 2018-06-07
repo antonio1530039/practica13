@@ -41,18 +41,16 @@
               <form role="form">
                 <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6 ">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3><?php echo $controller_dashboard->setQueryControllerGetNumber("productos", "stock", "<=",0); ?></h3>
-
                 <p>Productos sin stock</p>
               </div>
-              <!--div class="icon">
+              <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a-->
             </div>
           </div>
           <!-- ./col -->
@@ -63,10 +61,9 @@
                 <h3><?php echo $controller_dashboard->setQueryControllerGetNumber("productos", "deleted", "=",0); ?></h3>
                 <p>Productos registrados</p>
               </div>
-              <!--div class="icon">
+              <div class="icon">
                 <i class="ion ion-stats-bars"></i>
-              </div-->
-              <!--a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a-->
+              </div>
             </div>
           </div>
           <!-- ./col -->
@@ -77,10 +74,9 @@
                 <h3><?php echo $controller_dashboard->setQueryControllerGetNumber("usuarios", "deleted", "=",0); ?></h3>
                 <p>Usuarios registrados</p>
               </div>
-              <!--div class="icon">
+              <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a-->
             </div>
           </div>
           <!-- ./col -->
@@ -92,11 +88,10 @@
 
                 <p>Categorías registradas</p>
               </div>
-              <!--div class="icon">
+              <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a-->
-            </div>
+             </div>
           </div>
           <!-- ./col -->
         </div>

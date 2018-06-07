@@ -185,7 +185,7 @@ class MVC{
 				echo "<td>".$categoria['nombre']."</td>";
 				echo "<td>".$item['fecha_registro']."</td>";
           		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_producto&id=".$item['id']."></a></td>";
-				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+				echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']."  class='button radius tiny warning' onclick='confirmar();'></a></td>";
         echo "</tr>";
 				
 			}
