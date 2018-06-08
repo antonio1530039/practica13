@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="view/plugins/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
@@ -31,6 +32,7 @@
   <link rel="stylesheet" href="view/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="view/plugins/bootstrap/css/bootstrap.min.css">
   
+      
 </head>
 <body class="hold-transition sidebar-mini">
 
@@ -53,6 +55,7 @@
   </div>
 </div>
 <!-- ./wrapper -->
+  </body>
   
   <!-- Modal para borrar algo-->
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -80,21 +83,7 @@
     </div>
 </div>
 
-
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
-        <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
-      </div>
-    </div>
-  </div>
-</div>
+  
 
 
   
@@ -102,7 +91,7 @@
 
   
   
-</body>
+
 
 <!--<footer class="main-footer">
     <strong>Copyright &copy; 2018 <a href="http://adminlte.io">UPV</a>.</strong>
@@ -114,6 +103,7 @@
 <script src="view/plugins/jquery/jquery.min.js"></script>
 
 <script src="view/plugins/bootstrap/js/bootstrap.min.js"></script>
+
 
 <!-- DataTables -->
 <script src="view/plugins/datatables/jquery.dataTables.js"></script>
@@ -137,9 +127,9 @@
 <script src="view/dist/js/demo.js"></script>
 <!-- Select2 -->
 <script src="view/plugins/select2/select2.full.min.js"></script>
-
 <script type="text/javascript">
-     //funcion de confirmacion en js para confimar el borrado de un registro
+ 
+        //funcion de confirmacion en js para confimar el borrado de un registro
         function confirmar(){
           var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
           var x = document.getElementById("contra_txt").value;
@@ -160,53 +150,19 @@
         }
   
   
- $('#confirm-delete').on('show.bs.modal', function(e) {
-   document.getElementById("error").innerHTML = "";
-    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    
-});
-  
-  
-  var modalConfirm = function(callback){
-  
-  $("#btn-confirm").on("click", function(){
-    $("#mi-modal").modal('show');
-  });
+     $('#confirm-delete').on('show.bs.modal', function(e) {
+       document.getElementById("error").innerHTML = "";
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 
-  $("#modal-btn-si").on("click", function(){
-    callback(true);
-    $("#mi-modal").modal('hide');
-  });
-  
-  $("#modal-btn-no").on("click", function(){
-    callback(false);
-    $("#mi-modal").modal('hide');
-  });
-};
+    });
 
-modalConfirm(function(confirm){
-  if(confirm){
-    //Acciones si el usuario confirma
-    
-  }else{
-    //Acciones si el usuario no confirma
-    event.preventDefault();
-  }
-});
   
+
 
       //necesario para mostrar dataTables
           $(function () {
             $('.select2').select2();
             $("#example1").DataTable();
-            $('#example2').DataTable({
-              "paging": true,
-              "lengthChange": false,
-              "searching": false,
-              "ordering": true,
-              "info": true,
-              "autoWidth": false
-            });
           });
       </script> 
 

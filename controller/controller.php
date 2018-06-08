@@ -99,10 +99,10 @@ class MVC{
 			    <!-- Left navbar links -->
 			    <ul class='navbar-nav'>
 			      <li class='nav-item'>
-			        <a class='nav-link' data-widget='pushmenu'><i class='fa fa-bars'></i></a>
+			        <a class='nav-link' data-widget='pushmenu' href='#'><i class='fa fa-bars'></i></a>
 			      </li>
 			      <li class='nav-item d-none d-sm-inline-block'>
-			        <a href='index.php' class='nav-link'>Home</a>
+			        <a href='index.php' class='nav-link' >Home</a>
 			      </li>
 			    </ul>
 			    
@@ -136,8 +136,7 @@ class MVC{
 			        <ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
 			          <!-- Add icons to the links using the .nav-icon class
 			               with font-awesome or any other icon font library -->
-			          <li class='nav-item has-treeview menu-open'>
-			           <ul class='nav nav-treeview'>";
+";
             
             //Si la tienda en sesion es la 1: quiere decir que es la tienda ROOT (base) es decir, solo se mostrara gestion de tiendas
      
@@ -155,7 +154,8 @@ class MVC{
                           <p>Logout</p>
                         </a>
                       </li>
-                                    </nav>
+                      </ul>
+                   </nav>
               <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->

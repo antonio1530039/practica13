@@ -35,7 +35,7 @@
     </div>
     <section class="content">
       <div class="container-fluid">
-        <form role="form" method="post">
+        <form role="form" method="post" id="editarForm">
         <div class="row">
           <!-- left column -->
           <div class="col-3"></div>
@@ -49,7 +49,7 @@
               <!-- form start -->
                 <div class="card-body login-card-body">
                     <?php $controller_usuario->getUsuarioController() ?>
-                   <input type="submit" name="btn_actualizar" id='btn-confirm' value="Guardar cambios" class="btn btn-success" style="float:right;">
+                   <input type="submit" name="btn_actualizar"  value="Guardar cambios" class="btn btn-success" style="float:right;">
               </div>   
             </div>
             </div> 
@@ -59,7 +59,6 @@
 </section>
   </body>
   <script>
-
       </script>
   
   </html>

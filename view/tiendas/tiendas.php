@@ -8,7 +8,6 @@
   <head>
     <title>Gestion de Tiendas</title>
   </head>
-  <body>
   <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -76,10 +75,9 @@
                 </div>
               </form>
             </div>    
-      <script>
-      	
-
-      </script>
     </div>
-  </body>
+          </div>
+        </div>
+        </section>
+      </div>
 
