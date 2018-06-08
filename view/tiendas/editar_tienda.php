@@ -3,7 +3,7 @@
   $controller_tiendas = new MVC();
 
   //se verifica que se haya iniciado sesion
-  $controller_tiendas->verificarLoginController("tiendas");
+  $controller_tiendas->verificarLoginController();
   //se ejecuta el metodo actualizarTiendaController para actualizar la tienda seleccionado
   $controller_tiendas->actualizarTiendaController();
 

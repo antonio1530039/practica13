@@ -4,7 +4,7 @@
 
   //se verifica que se haya iniciado sesion
   
-  $controller_categoria->verificarLoginController("");
+  $controller_categoria->verificarLoginController();
   //se ejecuta el metodo actualizarProductoControler para actualizar el producto seleccionado
 
   $controller_categoria->actualizarCategoriaController();

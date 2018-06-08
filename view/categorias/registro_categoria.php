@@ -3,7 +3,7 @@
   //instancia de la clase controlador
   $controller_categorias = new MVC();
   //verificar si el usuario inicio sesion antes
-  $controller_categorias->verificarLoginController("");
+  $controller_categorias->verificarLoginController();
   //registro de producto al presionar el boton de registrar
   $controller_categorias->registroCategoriaController();
 

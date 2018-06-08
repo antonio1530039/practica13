@@ -2,7 +2,7 @@
   //instancia de la clase controlador
   $controller_inventario = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_inventario->verificarLoginController("");
+  $controller_inventario->verificarLoginController();
   //ejecutar el metodo que realiza el registro de historial
   $controller_inventario->registroHistorialController();
 

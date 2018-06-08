@@ -3,7 +3,7 @@
   //instancia de la clase controlador
   $controller_tiendas = new MVC();
   //verificar si el usuario inicio sesion antes
-  $controller_tiendas->verificarLoginController("tiendas");
+  $controller_tiendas->verificarLoginController();
   //registro de tienda al presionar el boton de registrar
   $controller_tiendas->registroTiendaController();
 

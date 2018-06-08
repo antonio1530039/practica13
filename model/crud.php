@@ -145,11 +145,12 @@ class Crud extends Conexion{
 		if($table=="productos" || $table == "usuarios" || $table == "categorias" || $table == "tiendas" ){
 			$idName = "id";
 		}
-		if($table == "tiendas"){ //cuando se pide un registro de tienda, esta no contiene el id de tiendas_id porque es la tabla en la que se basa todo
+		if($table == "tiendas" || $table == "usuarios"){ //cuando se pide un registro de tienda, esta no contiene el id de tiendas_id porque es la tabla en la que se basa todo
 			//se prepara la consulta sql
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0");
 					$stmt->bindParam(":id",$id); //se asocia el parametro 
-		}else{
+		}else    
+    {
 			//se prepara la consulta sql
 		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0 and tiendas_id = :tiendas_id");
 		$stmt->bindParam(":id",$id); //se asocia el parametro 

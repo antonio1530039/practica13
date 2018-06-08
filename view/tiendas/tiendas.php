@@ -2,7 +2,7 @@
   //instancia de la clase controlador
   $controller_tiendas = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_tiendas->verificarLoginController("tiendas");
+  $controller_tiendas->verificarLoginController();
 
 ?>
   <head>
@@ -58,9 +58,9 @@
                         <th>Nombre</th>
                         <th>Direccion</th>
                         <th>Fecha de registro</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                        <th>Ingresar</th>
                       </thead>
                       <tbody>
                         <?php 

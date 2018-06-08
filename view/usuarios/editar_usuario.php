@@ -4,7 +4,7 @@
 
   //se verifica que se haya iniciado sesion
   
-  $controller_usuario->verificarLoginController("");
+  $controller_usuario->verificarLoginController();
   //se ejecuta el metodo actualizarProductoControler para actualizar el producto seleccionado
 
   $controller_usuario->actualizarUsuarioController();

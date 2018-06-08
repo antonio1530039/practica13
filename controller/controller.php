@@ -15,6 +15,51 @@ class MVC{
 			$enlace = 'index';
 		}
 
+   
+    if(isset($_SESSION)){
+      if(isset($_SESSION["user_info"])){
+        if(isset($_SESSION["tienda"])){
+           //Condicionar si el usuario en sesion es tipo ROOT y la tienda en la que se encuentra es la ROOT (id 1) entonces solo redireccionar a GESTION DE TIENDAS
+          if($_SESSION["user_info"]["tipo_usuario"] == "1" && $_SESSION["tienda"] == "1"){
+            
+             
+             if($enlace != "ingresar_tienda" && $enlace != "borrar" && $enlace != "editar_tienda" && $enlace != "logout" && $enlace != "registro_tienda") { //sin embargo puede redireccionar a ingreso de tienda para poder ingresar a una
+                $enlace = "tiendas";
+             }
+            
+            
+            
+          }
+          //verificar que al borrar algo no sea la tienda ROOT o base, o que intenten modificarla
+          if($enlace == "borrar" || $enlace == "editar_tienda"){
+            //Sabiendo que el usuario ROOT puede tener acceso a editar_tienda y a borrar ; se debe prevenir que no intente editar o borrar
+            //por url la tienda root
+            $idX = (isset($_GET["id"])) ? $_GET["id"] : ""; //en caso de existir la variable id del metodo GET guardarla
+            $tipoOTabla = (isset($_GET["tipo"])) ? $_GET["tipo"] : ""; //en caso de existir la variable tipoOTabla del metodo GET guardarla
+            
+            if($enlace== "borrar"){
+              if($tipoOTabla == "tiendas" && $idX == "1"){ //si intentan borrar la tienda 1 se cancele y redireccione al index
+                $enlace = "tiendas"; //redireccionar al index
+              }
+              if($_SESSION["user_info"]["tipo_usuario"] != "1" && $tipoOTabla == "tiendas"){ //si el usuario no es root e intenta borrar una tienda, redireccionar al index
+                $enlace = "index";
+              }
+            }else{
+              if($idX == "1"){//si se quiere editar tienda
+                $enlace = "tiendas"; //redireccionar al index;
+              }
+         
+            }
+       
+          }
+          //condicionar que si el usuario no es root e intenta acceder a gestion de tiendas; redireccionar al index
+          if($_SESSION["user_info"]["tipo_usuario"] != "1" && ($enlace == "tiendas" || $enlace == "editar_tienda" || $enlace == "registro_tienda")){
+            $enlace = "index";//redireccionar al index
+          }
+        }
+        
+      }
+    }
 		//peticion al modelo
 		$peticion = Enlaces::enlacesPaginasModel($enlace);
     //mostrar peticion
@@ -22,18 +67,13 @@ class MVC{
 	}
 
     //metodo que verifica si usuario ha iniciado sesion, si no es asi, redireccion al login
-	public function verificarLoginController($esTienda){
+	public function verificarLoginController(){
 		//session_start();
 		if(isset($_SESSION)){
 			if(isset($_SESSION['login'])){
             	if(!$_SESSION['login']){
           			echo "<script>window.location='index.php?action=login';</script>";  
           			//return false;
-            	}else{
-            		if(!empty($esTienda)){
-            			if($_SESSION['user_info']['tipo_usuario'] != 1)
-            				echo "<script>window.location='index.php?action=index';</script>";
-            		}
             	}
       }else{
         echo "<script>window.location='index.php?action=login';</script>"; 
@@ -44,6 +84,10 @@ class MVC{
 			//return false;
 		}
 	}
+  
+  
+  
+  
   
   //metodo especifico para el archivo header.php o navegacion, el cual verifica si el usuario esta logueado, entonces muestra el menu
  public function showNav(){
@@ -83,7 +127,7 @@ class MVC{
          		//verificar si el usurio esta logueado se imprime el menu
 	            echo "
 			        <div class='info'>
-			          <a href='#' class='d-block'>"; $this->mostrarInicioController(); echo "<br>Tipo: ROOT</a>
+			          <a href='' class='d-block'>"; $this->mostrarInicioController(); echo "<br><i class='nav-icon fa fa-wrench'></i> [ ROOT ]</a>
 			        </div>
 			      </div>
 
@@ -93,62 +137,91 @@ class MVC{
 			          <!-- Add icons to the links using the .nav-icon class
 			               with font-awesome or any other icon font library -->
 			          <li class='nav-item has-treeview menu-open'>
-			           <ul class='nav nav-treeview'>
-			              <li class='nav-item'>
-			                <a href='index.php' class='nav-link'>
-			                  <i class='nav-icon fa fa-dashboard'></i>
-			                  <p>Dashboard</p>
-			                </a>
-			              </li>
-			              <li class='nav-item'>
-			                <a href='index.php?action=tiendas' class='nav-link'>
-			                  <i class='nav-icon fa fa-home'></i>
-			                  <p>Gestion de Tiendas</p>
-			                </a>
-			              </li>
-			              <li class='nav-item'>
-			                <a href='index.php?action=movimiento_inventario' class='nav-link'>
-			                  <i class='nav-icon fa fa-exchange'></i>
-			                  <p>Realizar movimiento</p>
-			                </a>
-			              </li>
-			              <li class='nav-item'>
-			                <a href='index.php?action=categorias' class='nav-link'>
-			                  <i class='nav-icon fa fa-tags'></i>
-			                  <p>Gestion de Categorias</p>
-			                </a>
-			              </li>
-			              <li class='nav-item'>
-			                <a href='index.php?action=productos' class='nav-link'>
-			                  <i class='nav-icon fa fa-cube'></i>
-			                  <p>Gestion de Productos</p>
-			                </a>
-			              </li>
-			              <li class='nav-item'>
-			                <a href='index.php?action=usuarios' class='nav-link'>
-			                  <i class='nav-icon fa fa-users'></i>
-			                  <p>Gestion de Usuarios</p>
-			                </a>
-			              </li>
+			           <ul class='nav nav-treeview'>";
+            
+            //Si la tienda en sesion es la 1: quiere decir que es la tienda ROOT (base) es decir, solo se mostrara gestion de tiendas
+     
+              if($_SESSION["tienda"] == "1"){ //tienda root, solo mostrar GESTION DE TIENDAS
+              echo "
+                      <li class='nav-item'>
+                        <a href='index.php?action=tiendas' class='nav-link'>
+                          <i class='nav-icon fa fa-home'></i>
+                          <p>Gestion de Tiendas</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+                          <i class='nav-icon fa fa-sign-out'></i>
+                          <p>Logout</p>
+                        </a>
+                      </li>
+                                    </nav>
+              <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+          </aside>
+            <!-- Content Wrapper. Contains page content -->
+      <div class='content-wrapper'>
+                ";
+              }else{//sino, es otra tienda mostrar todo normal
+                echo "
+                      <li class='nav-item'>
+                        <a href='index.php' class='nav-link'>
+                          <i class='nav-icon fa fa-dashboard'></i>
+                          <p>Dashboard</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=tiendas' class='nav-link'>
+                          <i class='nav-icon fa fa-home'></i>
+                          <p>Gestion de Tiendas</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=movimiento_inventario' class='nav-link'>
+                          <i class='nav-icon fa fa-exchange'></i>
+                          <p>Realizar movimiento</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=categorias' class='nav-link'>
+                          <i class='nav-icon fa fa-tags'></i>
+                          <p>Gestion de Categorias</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=productos' class='nav-link'>
+                          <i class='nav-icon fa fa-cube'></i>
+                          <p>Gestion de Productos</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
+                        <a href='index.php?action=usuarios' class='nav-link'>
+                          <i class='nav-icon fa fa-users'></i>
+                          <p>Gestion de Usuarios</p>
+                        </a>
+                      </li>
 
-			              <li class='nav-item'>
-			                <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
-			                  <i class='nav-icon fa fa-sign-out'></i>
-			                  <p>Logout</p>
-			                </a>
-			              </li>
-			            </ul>
-			          </li>
-			          
-			      </nav>
-			      <!-- /.sidebar-menu -->
-			    </div>
-			    <!-- /.sidebar -->
-			  </aside>
-			    <!-- Content Wrapper. Contains page content -->
-	  <div class='content-wrapper'>
-	            ";
+                      <li class='nav-item'>
+                        <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+                          <i class='nav-icon fa fa-sign-out'></i>
+                          <p>Logout</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
 
+              </nav>
+              <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+          </aside>
+            <!-- Content Wrapper. Contains page content -->
+      <div class='content-wrapper'>
+                ";
+            }
+            
+           
          	}else{ //usuario normal (no agrega o modifica tiendas)
 
          		echo "
@@ -232,12 +305,12 @@ class MVC{
 				$tienda = Crud::getRegModel($resultado['tiendas_id'], "tiendas", $resultado['tiendas_id']); //traer informacion de la tienda
 				if($tienda['deleted'] == "0"){ //existe la tienda, entonces iniciar sesion
 					$_SESSION['login']=true; //iniciar la variable de sesion login
-					$_SESSION['user_info']= $resultado; //guardar los datos del maestro en una sesion
+					$_SESSION['user_info']= $resultado; //guardar los datos del usuario en una sesion
 					$_SESSION['tienda'] = $resultado['tiendas_id'];
+          
 					echo "<script>window.location='index.php';</script>";
-					print_r($tienda);
 				}else{//No existe la tienda
-					echo "<script>alert('Acceso denegado. La tienda a la que estas tratando de iniciar fue borrada');</script>";
+					echo "<script>alert('Acceso denegado. La tienda a la que estas tratando de ingresar fue borrada');</script>";
 				}
 				
 			}else{
@@ -250,7 +323,7 @@ class MVC{
 	public function mostrarInicioController(){
 		if(isset($_SESSION['user_info'])){
 			$tienda = Crud::getRegModel($_SESSION['tienda'], "tiendas", $_SESSION['tienda']);
-			echo "Usuario: [ ".$_SESSION['user_info']['user']." ] <br> Tienda: [ ".$tienda['nombre']." ] ";
+			echo "<i class='nav-icon fa fa-user'></i> [ ".$_SESSION['user_info']['user']." ] <br> <i class='nav-icon fa fa-home'></i> [ ".$tienda['nombre']." ] ";
 		}
 	}
 
@@ -349,12 +422,22 @@ class MVC{
 					echo "<td>".$item['direccion']."</td>";
 					echo "<td>".$item['fecha_registro']."</td>";
 	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_tienda&id=".$item['id']."></a></td>";
-					//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
-	       echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
-	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."> Ingresar</a></td>";
+				echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
 	           
 	        echo "</tr>";
-				}
+				}else{ //si es la tienda root (Tienda base NO) NO MOSTRAR EDICION NI BORRADO
+          echo "<tr>";
+					echo "<td>".$item['id']."</td>";
+					echo "<td>".$item['nombre']."</td>";
+					echo "<td>".$item['direccion']."</td>";
+					echo "<td>".$item['fecha_registro']."</td>";
+	        echo "<td></td>";
+					echo "<td></td>";  
+	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
+	           
+	        echo "</tr>";
+        }
 				
 				
 			}

@@ -2,7 +2,7 @@
   //instancia de la clase controlador
   $controller_usuarios = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_usuarios->verificarLoginController("");
+  $controller_usuarios->verificarLoginController();
 
 ?>
   <head>
