@@ -2,7 +2,7 @@
   //instancia de la clase controlador
   $controller_inventario = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_inventario->verificarLoginController();
+  $controller_inventario->verificarLoginController("");
   //ejecutar el metodo que realiza el registro de historial
   $controller_inventario->registroHistorialController();
 
@@ -46,21 +46,20 @@
                     <br>
                     <div class="container row">
 
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="form-group">
                             <select class="form-control select2" name="producto" required="">
                               <?php $controller_inventario->getSelectForProductos(""); ?>
                             </select>
                         </div>
                     </div>
-                    <div class="col-6"> 
 
-                      <div class="row">
-                      
+                    <div class="col-12">
+                        <div class="form-group">
                             <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">Unidades</span>
-                            </div>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Unidades</span>
+                              </div>
                             <input type="number" step="1"  min="1"  class="form-control" name="cantidad" required="">
                             <div class="input-group-append">
                               <span class="input-group-text"></span>
@@ -68,10 +67,14 @@
                           </div>
 
                           </div>
-
-                      
                     </div>
-                    <input type="number" step="1" class="form-control" name="codigo_control" required="" placeholder="Numero de control">
+
+                    <div class="col-12">
+                        <div class="form-group">
+                          <input type="number" step="1" class="form-control" name="codigo_control" required="" placeholder="Numero de control">
+
+                          </div>
+                    </div>
                   </div>
 
                   <div class="container">
@@ -85,7 +88,6 @@
             </div>
 
             <div class="col-6">
-              
               <div class="card card-primary">
                       <div class="card-header">
                         <h3 class="card-title">Historial</h3>
@@ -94,6 +96,7 @@
                       
                     </div>
                     <br>
+                    <div class="table-responsive">
                     <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
                         <th>Num</th>
@@ -110,6 +113,7 @@
                          ?>
                       </tbody>
                     </table>
+                    </div>
 
                   </div>
 

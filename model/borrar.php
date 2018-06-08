@@ -6,7 +6,7 @@
 	//se crea la instancia del controlador
 	$controller = new MVC();
 	//en base al tipo de eliminacion se define el nombre del campo que corresponde a su llave primaria
-	if($_GET['tipo']=='productos' || $_GET['tipo']=='categorias' || $_GET['tipo']=='usuarios'){
+	if($_GET['tipo']=='productos' || $_GET['tipo']=='categorias' || $_GET['tipo']=='usuarios' || $_GET['tipo']=='tiendas'){
 		$pos = "id";
 	}
 

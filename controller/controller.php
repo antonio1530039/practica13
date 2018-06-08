@@ -22,24 +22,26 @@ class MVC{
 	}
 
     //metodo que verifica si usuario ha iniciado sesion, si no es asi, redireccion al login
-	public function verificarLoginController(){
+	public function verificarLoginController($esTienda){
 		//session_start();
 		if(isset($_SESSION)){
 			if(isset($_SESSION['login'])){
             	if(!$_SESSION['login']){
           			echo "<script>window.location='index.php?action=login';</script>";  
-          			//header("Location: index.php?")
-          			return false;
+          			//return false;
             	}else{
-            		return true;
+            		if(!empty($esTienda)){
+            			if($_SESSION['user_info']['tipo_usuario'] != 1)
+            				echo "<script>window.location='index.php?action=index';</script>";
+            		}
             	}
       }else{
         echo "<script>window.location='index.php?action=login';</script>"; 
-        return false;
+        //return false;
       }
 		}else{
 			echo "<script>window.location='index.php?action=login';</script>";
-			return false;
+			//return false;
 		}
 	}
   
@@ -47,114 +49,197 @@ class MVC{
  public function showNav(){
     if(isset($_SESSION)){
       if(isset($_SESSION['login'])){
-         if($_SESSION['login']){
-            //verificar si el usurio esta logueado se imprime el menu
-            echo "
-		   <!-- Navbar -->
-		  <nav class='main-header navbar navbar-expand bg-white navbar-light border-bottom'>
-		    <!-- Left navbar links -->
-		    <ul class='navbar-nav'>
-		      <li class='nav-item'>
-		        <a class='nav-link' data-widget='pushmenu'><i class='fa fa-bars'></i></a>
-		      </li>
-		      <li class='nav-item d-none d-sm-inline-block'>
-		        <a href='index.php' class='nav-link'>Home</a>
-		      </li>
-		    </ul>
-		    
-		  </nav>
-		  <!-- Main Sidebar Container -->
-		  <aside class='main-sidebar sidebar-dark-primary elevation-4'>
-		    <!-- Brand Logo -->
-		    <a href='index.php' class='brand-link'>
-		      <img src='view/dist/img/AdminLTELogo.png' alt='Logo' class='brand-image img-circle elevation-3'
-		           style='opacity: .8'>
-		      <span class='brand-text font-weight-light'>Inventarios</span>
-		    </a>
+         if($_SESSION['login']){ //verificar que el usuario inicio sesion
+         	echo "			   <!-- Navbar -->
+			  <nav class='main-header navbar navbar-expand bg-white navbar-light border-bottom'>
+			    <!-- Left navbar links -->
+			    <ul class='navbar-nav'>
+			      <li class='nav-item'>
+			        <a class='nav-link' data-widget='pushmenu'><i class='fa fa-bars'></i></a>
+			      </li>
+			      <li class='nav-item d-none d-sm-inline-block'>
+			        <a href='index.php' class='nav-link'>Home</a>
+			      </li>
+			    </ul>
+			    
+			  </nav>
+			  <!-- Main Sidebar Container -->
+			  <aside class='main-sidebar sidebar-dark-primary elevation-4'>
+			    <!-- Brand Logo -->
+			    <a href='index.php' class='brand-link'>
+			      <img src='view/dist/img/AdminLTELogo.png' alt='Logo' class='brand-image img-circle elevation-3'
+			           style='opacity: .8'>
+			      <span class='brand-text font-weight-light'>Inventarios</span>
+			    </a>
 
-		    <!-- Sidebar -->
-		    <div class='sidebar'>
-		      <!-- Sidebar user panel (optional) -->
-		      <div class='user-panel mt-3 pb-3 mb-3 d-flex'>
-		        <div class='image'>
-		          <img src='view/dist/img/boxed-bg.jpg' class='img-circle elevation-2' alt='User'>
-		        </div>
-		        <div class='info'>
-		          <a href='#' class='d-block'>"; $control = new MVC(); $control->mostrarInicioController(); echo "</a>
-		        </div>
-		      </div>
+			    <!-- Sidebar -->
+			    <div class='sidebar'>
+			      <!-- Sidebar user panel (optional) -->
+			      <div class='user-panel mt-3 pb-3 mb-3 d-flex'>
+";
 
-		      <!-- Sidebar Menu -->
-		      <nav class='mt-2'>
-		        <ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
-		          <!-- Add icons to the links using the .nav-icon class
-		               with font-awesome or any other icon font library -->
-		          <li class='nav-item has-treeview menu-open'>
-		           <ul class='nav nav-treeview'>
-		              <li class='nav-item'>
-		                <a href='index.php' class='nav-link'>
-		                  <i class='nav-icon fa fa-dashboard'></i>
-		                  <p>Dashboard</p>
-		                </a>
-		              </li>
-		              <li class='nav-item'>
-		                <a href='index.php?action=movimiento_inventario' class='nav-link'>
-		                  <i class='nav-icon fa fa-exchange'></i>
-		                  <p>Realizar movimiento</p>
-		                </a>
-		              </li>
-		              <li class='nav-item'>
-		                <a href='index.php?action=categorias' class='nav-link'>
-		                  <i class='nav-icon fa fa-tags'></i>
-		                  <p>Gestion de Categorias</p>
-		                </a>
-		              </li>
-		              <li class='nav-item'>
-		                <a href='index.php?action=productos' class='nav-link'>
-		                  <i class='nav-icon fa fa-cube'></i>
-		                  <p>Gestion de Productos</p>
-		                </a>
-		              </li>
-		              <li class='nav-item'>
-		                <a href='index.php?action=usuarios' class='nav-link'>
-		                  <i class='nav-icon fa fa-users'></i>
-		                  <p>Gestion de Usuarios</p>
-		                </a>
-		              </li>
+         	//verificar que tipo de usuario es:si es usuario root (el que agrega y accede a la tienda que quiera) o usuario de una tienda normal
+         	if($_SESSION['user_info']['tipo_usuario'] == 1){//para usuario root
+         		//verificar si el usurio esta logueado se imprime el menu
+	            echo "
+			        <div class='info'>
+			          <a href='#' class='d-block'>"; $this->mostrarInicioController(); echo "<br>Tipo: ROOT</a>
+			        </div>
+			      </div>
 
-		              <li class='nav-item'>
-		                <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
-		                  <i class='nav-icon fa fa-sign-out'></i>
-		                  <p>Logout</p>
-		                </a>
-		              </li>
-		            </ul>
-		          </li>
-		          
-		      </nav>
-		      <!-- /.sidebar-menu -->
-		    </div>
-		    <!-- /.sidebar -->
-		  </aside>
-		    <!-- Content Wrapper. Contains page content -->
-  <div class='content-wrapper'>
-            ";
-        }else{
-        	echo "<div>";
-        }
+			      <!-- Sidebar Menu -->
+			      <nav class='mt-2'>
+			        <ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
+			          <!-- Add icons to the links using the .nav-icon class
+			               with font-awesome or any other icon font library -->
+			          <li class='nav-item has-treeview menu-open'>
+			           <ul class='nav nav-treeview'>
+			              <li class='nav-item'>
+			                <a href='index.php' class='nav-link'>
+			                  <i class='nav-icon fa fa-dashboard'></i>
+			                  <p>Dashboard</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=tiendas' class='nav-link'>
+			                  <i class='nav-icon fa fa-home'></i>
+			                  <p>Gestion de Tiendas</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=movimiento_inventario' class='nav-link'>
+			                  <i class='nav-icon fa fa-exchange'></i>
+			                  <p>Realizar movimiento</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=categorias' class='nav-link'>
+			                  <i class='nav-icon fa fa-tags'></i>
+			                  <p>Gestion de Categorias</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=productos' class='nav-link'>
+			                  <i class='nav-icon fa fa-cube'></i>
+			                  <p>Gestion de Productos</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=usuarios' class='nav-link'>
+			                  <i class='nav-icon fa fa-users'></i>
+			                  <p>Gestion de Usuarios</p>
+			                </a>
+			              </li>
+
+			              <li class='nav-item'>
+			                <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+			                  <i class='nav-icon fa fa-sign-out'></i>
+			                  <p>Logout</p>
+			                </a>
+			              </li>
+			            </ul>
+			          </li>
+			          
+			      </nav>
+			      <!-- /.sidebar-menu -->
+			    </div>
+			    <!-- /.sidebar -->
+			  </aside>
+			    <!-- Content Wrapper. Contains page content -->
+	  <div class='content-wrapper'>
+	            ";
+
+         	}else{ //usuario normal (no agrega o modifica tiendas)
+
+         		echo "
+			        <div class='info'>
+			          <a href='#' class='d-block'>"; $this->mostrarInicioController(); echo "</a>
+			        </div>
+			      </div>
+
+			      <!-- Sidebar Menu -->
+			      <nav class='mt-2'>
+			        <ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
+			          <!-- Add icons to the links using the .nav-icon class
+			               with font-awesome or any other icon font library -->
+			          <li class='nav-item has-treeview menu-open'>
+			           <ul class='nav nav-treeview'>
+			              <li class='nav-item'>
+			                <a href='index.php' class='nav-link'>
+			                  <i class='nav-icon fa fa-dashboard'></i>
+			                  <p>Dashboard</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=movimiento_inventario' class='nav-link'>
+			                  <i class='nav-icon fa fa-exchange'></i>
+			                  <p>Realizar movimiento</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=categorias' class='nav-link'>
+			                  <i class='nav-icon fa fa-tags'></i>
+			                  <p>Gestion de Categorias</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=productos' class='nav-link'>
+			                  <i class='nav-icon fa fa-cube'></i>
+			                  <p>Gestion de Productos</p>
+			                </a>
+			              </li>
+			              <li class='nav-item'>
+			                <a href='index.php?action=usuarios' class='nav-link'>
+			                  <i class='nav-icon fa fa-users'></i>
+			                  <p>Gestion de Usuarios</p>
+			                </a>
+			              </li>
+
+			              <li class='nav-item'>
+			                <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+			                  <i class='nav-icon fa fa-sign-out'></i>
+			                  <p>Logout</p>
+			                </a>
+			              </li>
+			            </ul>
+			          </li>
+			          
+			      </nav>
+			      <!-- /.sidebar-menu -->
+			    </div>
+			    <!-- /.sidebar -->
+			  </aside>
+			    <!-- Content Wrapper. Contains page content -->
+	  <div class='content-wrapper'>
+	            ";
+
+         	}
+         	echo "<div>";
       }
 	}
   }
+}
 
   	//funcion encargada de ingresar los valores del login e iniciar sesion
 	public function ingresoUsuarioController(){
 		if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['btn_add'])){
+
 			$resultado = Crud::ingresoUsuarioModel($_POST['username'], $_POST['password']); //se ejecuta la funcion del modelo
 			//se verifica que lo retornado por el modelo no este vacio
 			if(!empty($resultado)){
-				$_SESSION['login']=true; //iniciar la variable de sesion login
-				$_SESSION['user_info']= $resultado; //guardar los datos del maestro en una sesion
-				echo "<script>window.location='index.php';</script>";
+				//hasta aqui, el usuario esta registrado, pero tenemos que validar que la tienda no haya sido borrada, debido al borrado logico que se utiliza (solo se actualiza el campo deleted en 1 en caso de ser borrado)
+				//verificar que la tienda en su campo deleted sea igual a 0 (tienda existente)
+				$tienda = Crud::getRegModel($resultado['tiendas_id'], "tiendas", $resultado['tiendas_id']); //traer informacion de la tienda
+				if($tienda['deleted'] == "0"){ //existe la tienda, entonces iniciar sesion
+					$_SESSION['login']=true; //iniciar la variable de sesion login
+					$_SESSION['user_info']= $resultado; //guardar los datos del maestro en una sesion
+					$_SESSION['tienda'] = $resultado['tiendas_id'];
+					echo "<script>window.location='index.php';</script>";
+					print_r($tienda);
+				}else{//No existe la tienda
+					echo "<script>alert('Acceso denegado. La tienda a la que estas tratando de iniciar fue borrada');</script>";
+				}
+				
 			}else{
 				//mostrar mensaje en caso de no existir el usuario
 				echo "<script>alert('Username o password incorrectos');</script>";
@@ -164,17 +249,18 @@ class MVC{
 	//funcion que imprime un mensaje en el inicio con el nombre del maestro tomado de la variable sesion
 	public function mostrarInicioController(){
 		if(isset($_SESSION['user_info'])){
-			echo "<center>".$_SESSION['user_info']['user']."</center>";
+			$tienda = Crud::getRegModel($_SESSION['tienda'], "tiendas", $_SESSION['tienda']);
+			echo "Usuario: [ ".$_SESSION['user_info']['user']." ] <br> Tienda: [ ".$tienda['nombre']." ] ";
 		}
 	}
 
 	//funcion encargada de crear una tabla con los productos registrados en la base de datos
 	public function getProductosController(){
-		$informacion = Crud::vistaXTablaModel("productos");//ejecucion del metodo del modelo
+		$informacion = Crud::vistaXTablaModel("productos", $_SESSION['tienda']);//ejecucion del metodo del modelo
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de los productos
 			foreach ($informacion as $row => $item) {
-				$categoria = Crud::getRegModel($item['id_categoria'], "categorias");
+				$categoria = Crud::getRegModel($item['id_categoria'], "categorias", $_SESSION['tienda']);
 				echo "<tr>";
 				echo "<td>".$item['id']."</td>";
 				echo "<td>".$item['codigo']."</td>";
@@ -197,13 +283,13 @@ class MVC{
 
 	//funcion encargada de crear una tabla con los productos registrados en la base de datos
 	public function getHistorialProductos(){
-		$informacion = Crud::vistaXTablaModel("transaccion");//ejecucion del metodo del modelo
+		$informacion = Crud::vistaXTablaModel("transaccion", $_SESSION['tienda']);//ejecucion del metodo del modelo
 		//	id	id_producto	id_usuario	cantidad	tipo	fecha	deleted
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de los productos
 			foreach ($informacion as $row => $item) {
-				$producto = Crud::getRegModel($item['id_producto'], "productos");
-				$usuario = Crud::getRegModel($item['id_usuario'], "usuarios");
+				$producto = Crud::getRegModel($item['id_producto'], "productos", $_SESSION['tienda']);
+				$usuario = Crud::getRegModel($item['id_usuario'], "usuarios", $_SESSION['tienda']);
 				echo "<tr>";
 				echo "<td>".$item['serie']."</td>";
 				echo "<td>".$producto['nombre']."</td>";
@@ -218,10 +304,21 @@ class MVC{
 		
 	}
 
+	//funcion encargada de verificar si el id de la tienda a ingresar existe, de ser asi cambia la variable de sesion de tienda para mostrar los datos de esta
+	public function ingresarTiendaController($id){
+		$tienda = Crud::getRegModel($id, "tiendas", "tiendas");
+		if(!empty($tienda)){
+			$_SESSION['tienda'] = $id;
+			echo "<script>window.location='index.php';</script>";
+		}else{
+			echo "<script>alert('La tienda no existe');</script>";
+		}
+	}
+
 
 	//funcion encargada de crear una tabla con las categorias registrados en la base de datos
 	public function getCategoriasController(){
-		$informacion = Crud::vistaXTablaModel("categorias");//ejecucion del metodo del modelo
+		$informacion = Crud::vistaXTablaModel("categorias", $_SESSION['tienda']);//ejecucion del metodo del modelo
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de las categorias
 			foreach ($informacion as $row => $item) {
@@ -239,9 +336,37 @@ class MVC{
 		
 	}
 
+	//funcion encargada de crear una tabla con las tiendas registrados en la base de datos
+	public function getTiendasController(){
+		$informacion = Crud::vistaXTablaModel("tiendas", "");//ejecucion del metodo del modelo
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de las categorias
+			foreach ($informacion as $row => $item) {
+				if($item['id'] != 1){//no mostrar la tienda root (la tienda  a la que pertenece el super admin)
+					echo "<tr>";
+					echo "<td>".$item['id']."</td>";
+					echo "<td>".$item['nombre']."</td>";
+					echo "<td>".$item['direccion']."</td>";
+					echo "<td>".$item['fecha_registro']."</td>";
+	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_tienda&id=".$item['id']."></a></td>";
+					//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
+	       echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."> Ingresar</a></td>";
+	           
+	        echo "</tr>";
+				}
+				
+				
+			}
+		}
+		
+	}
+
+
+
 	//funcion encargada de crear una tabla con los usuarios registrados en la base de datos
 	public function getUsuariosController($idUser){
-		$informacion = Crud::vistaXTablaModel("usuarios");//ejecucion del metodo del modelo
+		$informacion = Crud::vistaXTablaModel("usuarios", $_SESSION['tienda']);//ejecucion del metodo del modelo
 		if(!empty($informacion)){
 			//si el resultado no esta vacio, imprimir los datos de los usuarios
       if(empty($idUser)){
@@ -286,7 +411,7 @@ class MVC{
  
 	//funcion que crea un select con las categorias registradas
 	public function getSelectForCategorias($firstID){
-		$informacion = Crud::vistaXTablaModel("categorias"); //se obtienen todos las categorias de la bd mediante la conexion al modelo
+		$informacion = Crud::vistaXTablaModel("categorias", $_SESSION['tienda']); //se obtienen todos las categorias de la bd mediante la conexion al modelo
 		if(!empty($informacion)){
 			if($firstID==""){
 				foreach ($informacion as $row => $item) {
@@ -294,7 +419,7 @@ class MVC{
 				}
 			}else{
 				//se obtiene la informacion del maestro en base al parametro firstID
-				$categoria = Crud::getRegModel($firstID, "categorias");
+				$categoria = Crud::getRegModel($firstID, "categorias", $_SESSION['tienda']);
 				//se coloca primero la opcion del select del maestro
 				echo "<option value='".$categoria['id']."'>".$categoria['nombre']."</option>";
 				foreach ($informacion as $row => $item) { //se imprimen los maestros restantes
@@ -309,7 +434,7 @@ class MVC{
 
 	//funcion que crea un select con los productos registrados
 	public function getSelectForProductos(){
-		$informacion = Crud::vistaXTablaModel("productos"); //se obtienen todos las categorias de la bd mediante la conexion al modelo
+		$informacion = Crud::vistaXTablaModel("productos", $_SESSION['tienda']); //se obtienen todos las categorias de la bd mediante la conexion al modelo
 		if(!empty($informacion)){ 
 				foreach ($informacion as $row => $item) { //se imprimen los valores
 					echo "<option value='".$item['id']."'>".$item['codigo']. " | ".$item['nombre'] ." | " . $item['stock'] . "</option>";
@@ -330,6 +455,7 @@ class MVC{
 						'codigo'=> $_POST['codigo'],
 						'fecha'=> date("Y-m-d"),
 						'categoria'=> $_POST['categoria'],
+						'tiendas_id'=> $_SESSION['tienda']
 					);
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroProductoModel($data);
@@ -359,6 +485,7 @@ class MVC{
 						'fecha'=> date("Y-m-d"),
 						'tipo'=> $tipo,
 						'serie'=> $_POST['codigo_control'],
+						'tiendas_id'=> $_SESSION['tienda']
 					);
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroHistorialModel($data);
@@ -378,7 +505,8 @@ class MVC{
 	public function registroCategoriaController(){
 		if(isset($_POST['btn_agregar'])){//verificar clic en el boton
 			//crear array con los datos a registrar tomados de los controles
-			$data = array('nombre'=> $_POST['nombre']
+			$data = array('nombre'=> $_POST['nombre'],
+				'tiendas_id'=> $_SESSION['tienda']
 					);
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroCategoriaModel($data);
@@ -396,7 +524,8 @@ class MVC{
 			//crear array con los datos a registrar tomados de los controles
 			$data = array('username'=> $_POST['username'],
 				'password'=> $_POST['password'],
-				'fecha_registro'=> date("Y-m-d")
+				'fecha_registro'=> date("Y-m-d"),
+				'tiendas_id'=> $_SESSION['tienda']
 					);
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroUsuarioModel($data);
@@ -409,12 +538,33 @@ class MVC{
 	}
 
 
+
+	//funcion encargada de verificar si se presiono un boton de registro, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
+	public function registroTiendaController(){
+		if(isset($_POST['btn_agregar'])){//verificar clic en el boton
+			//crear array con los datos a registrar tomados de los controles
+			$data = array('nombre'=> $_POST['nombre'],
+				'direccion'=> $_POST['direccion'],
+				'fecha_registro'=> date("Y-m-d")
+					);
+			//peticion al modelo del reigstro del producto mandando como param la informacion de este
+			$registro = Crud::registroTiendaModel($data);
+			if($registro == "success"){ //verificar la respuesta del modelo
+				echo "<script>window.location='index.php?action=tiendas';</script>";
+			}else{
+				echo "<script>alert('Error al registrar la tienda')</script>";
+			}
+		}
+	}
+
+
+
  
 
 	//funcion encargada de, dado un id de un producto, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
 	public function getProductoController(){
 		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
-		$peticion = Crud::getRegModel($id, 'productos'); //peticion al modelo del registro especificado por el id
+		$peticion = Crud::getRegModel($id, 'productos', $_SESSION['tienda']); //peticion al modelo del registro especificado por el id
 		if(!empty($peticion)){
 			echo "
 			<div class='col-sm-6'>
@@ -491,7 +641,7 @@ class MVC{
                       </div>
                     </div>
                   </div>
-                  <input type='submit' name='btn_actualizar' value='Guardar cambios' class='btn btn-success' onclick='confirmar();' style='float: right;'>
+                  <input type='submit' name='btn_actualizar' value='Guardar cambios' class='btn btn-success' style='float: right;'>
                   </div>
                   ";
 		}
@@ -501,7 +651,7 @@ class MVC{
 	//funcion encargada de, dado un id de una categoria, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
 	public function getCategoriaController(){
 		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
-		$peticion = Crud::getRegModel($id, 'categorias'); //peticion al modelo del registro especificado por el id
+		$peticion = Crud::getRegModel($id, 'categorias', $_SESSION['tienda']); //peticion al modelo del registro especificado por el id
 		if(!empty($peticion)){
 			echo "
 				<div class='form-group'>
@@ -523,7 +673,7 @@ class MVC{
 	//funcion encargada de, dado un id de un usuario, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
 	public function getUsuarioController(){
 		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
-		$peticion = Crud::getRegModel($id, 'usuarios'); //peticion al modelo del registro especificado por el id
+		$peticion = Crud::getRegModel($id, 'usuarios', $_SESSION['tienda']); //peticion al modelo del registro especificado por el id
 		if(!empty($peticion)){
 			echo "
 					<div class='form-group'>
@@ -537,6 +687,28 @@ class MVC{
                   <div class='form-group'>
                     <label>Password</label>
                     <input type='text' class='form-control' name='password' value='".$peticion["password"]."' placeholder='Ingresa la contraseña del usuario' required=''>
+                  </div>
+                  ";
+		}
+	}
+
+	//funcion encargada de, dado un id de un usuario, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente
+	public function getTiendaController(){
+		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
+		$peticion = Crud::getRegModel($id, "tiendas", $_SESSION['tienda']); //peticion al modelo del registro especificado por el id
+		if(!empty($peticion)){
+			echo "
+					<div class='form-group'>
+                    <label>Id</label>
+                    <input type='text' class='form-control' name='id' value='".$peticion["id"]."' placeholder='Ingresa el id' required='' readonly='true'>
+                  </div>
+				<div class='form-group'>
+                    <label>Nombre</label>
+                    <input type='text' class='form-control' name='nombre' value='".$peticion["nombre"]."' placeholder='Ingresa el nombre de la tienda' required=''>
+                  </div>
+                  <div class='form-group'>
+                    <label>Direccion</label>
+                    <input type='text' class='form-control' name='direccion' value='".$peticion["direccion"]."' placeholder='Ingresa la direccion de la tienda' required=''>
                   </div>
                   ";
 		}
@@ -557,6 +729,7 @@ class MVC{
 				"precio_unitario"=>$_POST['precio'],
 				"stock"=>$_POST['stock'],
 				"categoria"=>$_POST['categoria'],
+				"tiendas_id"=>$_SESSION['tienda']
 			);
 
 			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
@@ -576,7 +749,8 @@ class MVC{
 			//se toman los valores de los controles y se guardan en un array
 			$data = array(
 				"username"=>$_POST['username'],
-				"password"=>$_POST['password']
+				"password"=>$_POST['password'],
+				"tiendas_id"=>$_SESSION['tienda']
 			);
 
 			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
@@ -591,11 +765,36 @@ class MVC{
 	}
 
 	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
+	public function actualizarTiendaController(){
+		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
+			//se toman los valores de los controles y se guardan en un array
+			$data = array(
+				"nombre"=>$_POST['nombre'],
+				"direccion"=>$_POST['direccion']
+			);
+
+			//se realiza la ejecucion del metodo que actualiza la tienda en el modelo, mandando los parametros correspondientes, datos y matricula
+			$peticion = Crud::actualizarTiendaModel($data, $_POST['id']);
+			if($peticion == "success"){ //verificacion de la respuesta por el modelo
+       echo "<script>window.location='index.php?action=tiendas';</script>";
+        
+			}else{
+				echo "<script>alert('Error al actualizar')</script>";
+			}
+		}
+	}
+
+
+
+
+
+	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
 	public function actualizarCategoriaController(){
 		if(isset($_POST['btn_actualizar'])){ //verificacion de clic en el boton
 			//se toman los valores de los controles y se guardan en un array
 			$data = array(
-				"nombre"=>$_POST['nombre']
+				"nombre"=>$_POST['nombre'],
+				"tiendas_id"=>$_SESSION['tienda']
 			);
 
 			//se realiza la ejecucion del metodo que actualiza un alumno en el modelo, mandando los parametros correspondientes, datos y matricula
@@ -613,16 +812,16 @@ class MVC{
 	//funcion que muestra el dashboard del sistema
 	function showDashboard(){
 		//mostrar productos sin stock
-		$this->setQueryController("productos","Productos sin stock", "stock", "=",0);
+		$this->setQueryController("productos","Productos sin stock", "stock", "=",0, $_SESSION['tienda']);
 
-		$this->setQueryController("transaccion","Transacciones realizadas hoy", "fecha", "=", date('Y-m-d'));
+		$this->setQueryController("transaccion","Transacciones realizadas hoy", "fecha", "=", date('Y-m-d'), $_SESSION['tienda']);
 		
 	}
 
 
 	//funcion setQueryControllerGetNumber, dado un nombre de tabla, un titulo, un campo, un operador y un valor, se ejecuta un metodo de la clase modelo (Crud) el cual, pasando como parametro los valores mencionados, obtiene los registos que cumplan con estas coincidencias en la tabla seleccionada y retorna el numero de registros de la coincidencia
 	function setQueryControllerGetNumber($table, $field, $operator, $equals){
-		$peticion = Crud::getQueryFromX($table, $field, $operator,$equals); //peticion al modelo
+		$peticion = Crud::getQueryFromX($table, $field, $operator,$equals, $_SESSION['tienda']); //peticion al modelo
 		//se imprime la tabla con informacion
 		if(!empty($peticion)){ //se verifica que la variable peticion no este vacia
 			return count($peticion);
@@ -634,15 +833,15 @@ class MVC{
 
 
 	//funcion setQueryController, dado un nombre de tabla, un titulo, un campo, un operador y un valor, se ejecuta un metodo de la clase modelo (Crud) el cual, pasando como parametro los valores mencionados, obtiene los registos que cumplan con estas coincidencias en la tabla seleccionada y crea una tabla con esta informacion
-	function setQueryController($table, $title, $field, $operator, $equals){
-		$peticion = Crud::getQueryFromX($table, $field, $operator,$equals); //peticion al modelo
+	function setQueryController($table, $title, $field, $operator, $equals, $tiendas_id){
+		$peticion = Crud::getQueryFromX($table, $field, $operator,$equals, $tiendas_id); //peticion al modelo
 		//se imprime la tabla con informacion
 		echo "<div class='form-group'>
 					<div class='card-header'>
                         <h3 class='card-title'>$title (".count($peticion).")</h3>
                       </div>
                     <div class='card'>";
-		echo "<table width='100%' class='table table-bordered table-striped'>";
+		echo "<div class='table-responsive'><table width='100%' class='table table-bordered table-striped'>";
 			echo "<thead>";
 				echo "<tr>";
 					if($table=="transaccion"){
@@ -664,12 +863,12 @@ class MVC{
 			foreach ($peticion as $row => $item) {
 				echo "<tr>";
 				if($table == "transaccion"){
-					$producto = Crud::getRegModel($item['id_producto'],"productos");
+					$producto = Crud::getRegModel($item['id_producto'],"productos",$_SESSION['tienda']);
 					echo "<td>".$producto['nombre']."</td>";
 					echo "<td>".$item["cantidad"]."</td>";
 					echo "<td>".$item["tipo"]."</td>";
 					echo "<td>".$item["fecha"]."</td>";
-					$usuario = Crud::getRegModel($item['id_usuario'],"usuarios");
+					$usuario = Crud::getRegModel($item['id_usuario'],"usuarios", $_SESSION['tienda']);
 					echo "<td>".$usuario["user"]."</td>";
 				}else{
 					echo "<td>".$item['nombre']."</td>";
@@ -684,13 +883,14 @@ class MVC{
       		echo "</table>";
       		echo "</div>";
       		echo "</div>";
+      		echo "</div>";
 	}
 
 
 	//Funcion que dado un id y nombre de tabla, ejecuta el metodo del modelo y borra el registro especificado en base a la tabla
 	public function borrarController($id, $tabla){
 		//se ejecuta el metodo borrar del modelo mandando como paremtros los explicados anteriormente
-		$peticion = Crud::borrarXModel($id, $tabla);
+		$peticion = Crud::borrarXModel($id, $tabla, $_SESSION['tienda']);
 		if($peticion == "success"){ //verificar respuesta
 			echo "<script>window.location='index.php?action=".$tabla."';</script>";
 		}else{

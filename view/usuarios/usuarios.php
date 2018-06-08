@@ -2,7 +2,7 @@
   //instancia de la clase controlador
   $controller_usuarios = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_usuarios->verificarLoginController();
+  $controller_usuarios->verificarLoginController("");
 
 ?>
   <head>
@@ -51,6 +51,7 @@
                       </div>
                     <div class="card-body p-0">
                       <br>
+                    <div class="table-responsive">
                     <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
                         <th>Id</th>
@@ -67,6 +68,7 @@
                          ?>
                       </tbody>
                     </table>
+                    </div>
                   </div>
                   </div>
                 </div>

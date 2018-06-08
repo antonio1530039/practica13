@@ -4,7 +4,7 @@
 
   //se verifica que se haya iniciado sesion
   
-  $controller_productos->verificarLoginController();
+  $controller_productos->verificarLoginController("");
   //se ejecuta el metodo actualizarProductoControler para actualizar el producto seleccionado
 
   $controller_productos->actualizarProductoController();
@@ -47,11 +47,6 @@
   </body>
   <script>
       //funcion de confirmacion en caso de guardar los datos
-        function confirmar(){
-          var x = confirm("Seguro que deseas guardar los datos?");
-          if(!x)
-            event.preventDefault();
-        }
 
 
       </script>

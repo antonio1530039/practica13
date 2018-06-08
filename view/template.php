@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="view/plugins/bootstrap/css/bootstrap.min.css">
   
 </head>
-<body>
+<body class="hold-transition sidebar-mini">
 
 <div class="wrapper">
   <?php

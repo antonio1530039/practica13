@@ -3,7 +3,7 @@
   //instancia de la clase controlador
   $controller_productos = new MVC();
   //verificar si el usuario inicio sesion antes
-  $controller_productos->verificarLoginController();
+  $controller_productos->verificarLoginController("");
   //registro de producto al presionar el boton de registrar
   $controller_productos->registroProductoController();
 
