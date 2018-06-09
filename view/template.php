@@ -203,7 +203,7 @@
       
      }
     //funcion que se manda llamar al tratar de eliminar algun registro y muestra un sweet alert pidiendo la contraseña del usuario
-    function b(){
+    function b(id){
        var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
         event.preventDefault();
         swal({
@@ -224,10 +224,10 @@
             document.getElementById("err_sa_2").innerHTML = "Contraseña incorrecta";
             return false
           }
-          var ur = document.getElementById("borrar_btn").href;
+          var ur = document.getElementById("borrar_btn"+id).href;
           //alert(ur);
           window.location = ur;
-          swal("Exito!", "Registro eliminado", "error");
+          swal("Exito!", "Registro eliminado", "success");
         });
       
      }

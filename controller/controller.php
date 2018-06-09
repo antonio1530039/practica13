@@ -344,9 +344,9 @@ class MVC{
 				echo "<td>".$categoria['nombre']."</td>";
 				echo "<td>".$item['fecha_registro']."</td>";
           		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_producto&id=".$item['id']."></a></td>";
-				//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=productos&id=".$item['id']."  class='button radius tiny warning' onclick='confirmar();'></a></td>";
-        echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=productos&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
-           
+				//mandar por propiedad onclick el id del elemento tag a para eleminarlo
+				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=productos&id=".$item['id']."'></a></td>";  
+            
         echo "</tr>";
 				
 			}
@@ -399,9 +399,9 @@ class MVC{
 				echo "<td>".$item['id']."</td>";
 				echo "<td>".$item['nombre']."</td>";
           		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_categoria&id=".$item['id']."></a></td>";
-				//echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=categorias&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
-       echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=categorias&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
-           
+				//mandar por propiedad onclick el id del elemento tag a para eleminarlo
+				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=categorias&id=".$item['id']."'></a></td>";  
+              
         echo "</tr>";
 				
 			}
@@ -422,9 +422,11 @@ class MVC{
 					echo "<td>".$item['direccion']."</td>";
 					echo "<td>".$item['fecha_registro']."</td>";
 	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_tienda&id=".$item['id']."></a></td>";
-				echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
-	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
-	           
+          //mandar por propiedad onclick el id del elemento tag a para eleminarlo
+				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."'></a></td>";  
+           
+	       echo "<td><a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
+	           //href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."'
 	        echo "</tr>";
 				}else{ //si es la tienda root (Tienda base NO) NO MOSTRAR EDICION NI BORRADO
           echo "<tr>";
@@ -476,10 +478,8 @@ class MVC{
           echo "<td>".md5($item['password'])."</td>";
           echo "<td>".$item['fecha_registro']."</td>";
                echo "<td>"."<a class='btn btn-secondary fa fa-edit' href='index.php?action=editar_usuario&id=".$item['id']."'></a></td>";
-           
-            //echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
-           // echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn' value='index.php?action=borrar&tipo=usuarios&id=".$item['id']."'  href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
-             echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn' onclick='b();' href='index.php?action=borrar&tipo=usuarios&id=".$item['id']."' class='button radius tiny warning'></a></td>";  
+             //mandar por propiedad onclick el id del elemento tag a para eleminarlo
+				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=usuarios&id=".$item['id']."'></a></td>";  
            
             echo "</tr>";
           }
@@ -990,7 +990,7 @@ class MVC{
         $_SESSION["tienda"] = 1;
       }
 			echo "<script>
-      swal('Exito', 'Operación completada', 'success');
+     
       window.location='index.php?action=".$tabla."';
       </script>";
 		}else{
