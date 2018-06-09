@@ -20,7 +20,11 @@ class Crud extends Conexion{
 		//verificar si la tabla a mostrar es tienda debido a que no cuenta con campo tiendas_id (es la tabla padre)
 		if($table == "tiendas"){
 			 $stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0"); //preparacion de la consulta SQL 
-		}else{
+		}else if($table == "transaccion"){
+      $stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id ORDER BY fecha ASC"); //preparacion de la consulta SQL 
+      $stmt->bindParam(":tiendas_id",$tiendas_id);
+    }
+    else{
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id"); //preparacion de la consulta SQL 
       		$stmt->bindParam(":tiendas_id",$tiendas_id);
 		}

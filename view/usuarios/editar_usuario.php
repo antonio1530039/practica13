@@ -21,7 +21,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Modificación de usuario</h1>
+            <h1 class="m-0 text-dark">Modificación de x</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -35,7 +35,7 @@
     </div>
     <section class="content">
       <div class="container-fluid">
-        <form role="form" method="post" id="editarForm">
+        <form role="form" method="post" id="formulario">
         <div class="row">
           <!-- left column -->
           <div class="col-3"></div>
@@ -49,11 +49,12 @@
               <!-- form start -->
                 <div class="card-body login-card-body">
                     <?php $controller_usuario->getUsuarioController() ?>
-                   <input type="submit" name="btn_actualizar"  value="Guardar cambios" class="btn btn-success" style="float:right;">
+                  <button type="submit" name="btn_actualizar" id="targ"  class="btn btn-success" onclick="c();" style="float:right;">Guardar cambios</button>
               </div>   
             </div>
             </div> 
                 </div>
+        </form>
               </div>
 </div>
 </section>

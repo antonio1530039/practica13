@@ -47,7 +47,7 @@
               <!-- form start -->
                 <div class="card-body login-card-body">
                     <?php $controller_tiendas->getTiendaController() ?>
-                   <input type="submit" name="btn_actualizar" id='btn-confirm' value="Guardar cambios" class="btn btn-success" style="float:right;">
+                  <button type="submit" name="btn_actualizar" id="targ"  class="btn btn-success" onclick="c();" style="float:right;">Guardar cambios</button>
               </div>   
             </div>
             </div> 

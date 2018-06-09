@@ -31,7 +31,10 @@
     <!-- Select2 -->
   <link rel="stylesheet" href="view/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="view/plugins/bootstrap/css/bootstrap.min.css">
-  
+  <!--script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script-->
+  <script src="view/dist/js/plugins/sweetalert/sweetalert.js"></script>
+    <!--script src="view/dist/js/plugins/sweetalert/sweetalert.min.js"></script-->
+    <link rel="stylesheet" href="view/dist/js/plugins/sweetalert/sweetalert.css">
       
 </head>
 <body class="hold-transition sidebar-mini">
@@ -140,13 +143,24 @@
            
         }
 
-      //funcion de confirmacion en js para confimar el borrado de un registro
+      //funcion de confirmacion de cierre de sesion, muestra un sweet alert
         function confirmLogout(){
-          var x = confirm("¿Seguro que quieres cerrar sesión?");
-          if(!x){
-            event.preventDefault();
-          }
-            
+          event.preventDefault();
+          swal({
+          title: "Cerrar sesión",
+          text: "¿Seguro que deseas cerrar la sesión?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "btn-info",
+          confirmButtonText: "Si, estoy seguro",
+          closeOnConfirm: false
+        },
+        function(){
+          window.location = 'index.php?action=logout';
+        });
+          
+     
+         
         }
   
   
@@ -155,8 +169,74 @@
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 
     });
-
   
+      //funcion encargada de mostrar un alert cuando el usuario da clic en el boton actualizar y pida la contraseña
+    function c(){
+       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+        event.preventDefault();
+        swal({
+          title: "Confirmar acción",
+          text: "<p>Ingresa tu contraseña para guardar los cambios</p><br><input type='password' class='form-control' id='pass_sw' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa' style='color:red'></label><br>",
+          html: true,
+          
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Confirmar",
+          closeOnConfirm: false,
+          inputPlaceholder: "Escribe tu contraseña aqui",
+          inputValidator: (value) => {
+            return !value && 'You need to write something!'
+          }
+        }, function () {
+          var inputValue = document.getElementById("pass_sw").value;
+          if (inputValue === false) return false;
+          if (inputValue != ps) {
+            document.getElementById("err_sa").innerHTML = "Contraseña incorrecta";
+            //swal.showInputError("You need to write something!");
+            //swal("Operación cancelada!", "La contraseña es incorrecta", "error");
+            return false
+          }
+           $( "#targ" ).click();
+          swal("Exito!", "Registro modificado", "success");
+        });
+      
+     }
+    //funcion que se manda llamar al tratar de eliminar algun registro y muestra un sweet alert pidiendo la contraseña del usuario
+    function b(){
+       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+        event.preventDefault();
+        swal({
+          title: "Confirmar baja de registro",
+          text: "<p>Ingresa tu contraseña para dar de baja el registro</p><br><input type='password' class='form-control' id='pass_sw_2' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa_2' style='color:red'></label><br>",
+          html: true,
+          
+          type: "error",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Confirmar",
+          closeOnConfirm: false,
+          inputPlaceholder: "Escribe tu contraseña aqui",
+        }, function () {
+          var inputValue = document.getElementById("pass_sw_2").value;
+          if (inputValue === false) return false;
+          if (inputValue != ps) {
+            document.getElementById("err_sa_2").innerHTML = "Contraseña incorrecta";
+            return false
+          }
+          var ur = document.getElementById("borrar_btn").href;
+          //alert(ur);
+          window.location = ur;
+          swal("Exito!", "Registro eliminado", "error");
+        });
+      
+     }
+  //crear datable para Historial y ordenar por fecha
+    $(document).ready(function() {
+    $('#htable').DataTable( {
+        "order": [[ 3, "desc" ]]
+    } );
+} );
 
 
       //necesario para mostrar dataTables

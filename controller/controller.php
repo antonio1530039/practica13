@@ -149,7 +149,7 @@ class MVC{
                         </a>
                       </li>
                       <li class='nav-item'>
-                        <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+                        <a href='' class='nav-link' onclick='confirmLogout();'>
                           <i class='nav-icon fa fa-sign-out'></i>
                           <p>Logout</p>
                         </a>
@@ -203,7 +203,7 @@ class MVC{
                       </li>
 
                       <li class='nav-item'>
-                        <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+                        <a href='' class='nav-link' onclick='confirmLogout();'>
                           <i class='nav-icon fa fa-sign-out'></i>
                           <p>Logout</p>
                         </a>
@@ -269,7 +269,7 @@ class MVC{
 			              </li>
 
 			              <li class='nav-item'>
-			                <a href='index.php?action=logout' class='nav-link' onclick='confirmLogout();'>
+			                <a href='' class='nav-link' onclick='confirmLogout();'>
 			                  <i class='nav-icon fa fa-sign-out'></i>
 			                  <p>Logout</p>
 			                </a>
@@ -310,12 +310,12 @@ class MVC{
           
 					echo "<script>window.location='index.php';</script>";
 				}else{//No existe la tienda
-					echo "<script>alert('Acceso denegado. La tienda a la que estas tratando de ingresar fue borrada');</script>";
+					echo "<script>swal('Tienda desactivada', 'La tienda a la que intentas ingresar esta desactivada', 'error');</script>";
 				}
-				
+        
 			}else{
 				//mostrar mensaje en caso de no existir el usuario
-				echo "<script>alert('Username o password incorrectos');</script>";
+				echo "<script>swal('Usuario o contraseña incorrectos', 'No existe un usuario registrado con esas credenciales', 'error');</script>";
 			}
 		}
 	}
@@ -384,7 +384,7 @@ class MVC{
 			$_SESSION['tienda'] = $id;
 			echo "<script>window.location='index.php';</script>";
 		}else{
-			echo "<script>alert('La tienda no existe');</script>";
+			echo "<script>swal('Error', 'La tienda a la que intentas ingresar NO EXISTE', 'error');</script>";
 		}
 	}
 
@@ -478,7 +478,9 @@ class MVC{
                echo "<td>"."<a class='btn btn-secondary fa fa-edit' href='index.php?action=editar_usuario&id=".$item['id']."'></a></td>";
            
             //echo "<td>"."<a class='btn btn-danger fa fa-trash' href=index.php?action=borrar&tipo=usuarios&id=".$item['id']." class='button radius tiny warning' onclick='confirmar();'></a></td>";
-            echo "<td>"."<a class='btn btn-danger fa fa-trash' data-href='index.php?action=borrar&tipo=usuarios&id=".$item['id']."' href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+           // echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn' value='index.php?action=borrar&tipo=usuarios&id=".$item['id']."'  href='#' class='button radius tiny warning' data-toggle='modal' data-target='#confirm-delete' ></a></td>";  
+             echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn' onclick='b();' href='index.php?action=borrar&tipo=usuarios&id=".$item['id']."' class='button radius tiny warning'></a></td>";  
+           
             echo "</tr>";
           }
           
@@ -543,9 +545,12 @@ class MVC{
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroProductoModel($data);
 			if($registro == "success"){ //verificar la respuesta del modelo
-				echo "<script>window.location='index.php?action=productos';</script>";
+				echo "<script>
+        swal('Exito!', 'Producto registrado', 'success');
+        window.location='index.php?action=productos';
+        </script>";
 			}else{
-				echo "<script>alert('Error al registrar el producto')</script>";
+				echo "<script>swal('Error', 'Ocurrio un error al registrar', 'error');</script>";
 			}
 		}
 	}
@@ -573,11 +578,14 @@ class MVC{
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroHistorialModel($data);
 			if($registro == "success"){ //verificar la respuesta del modelo
-				echo "<script>window.location='index.php?action=movimiento_inventario';</script>";
+				echo "<script>
+        swal('Exito!', 'Movimiento registrado', 'success');
+        window.location='index.php?action=movimiento_inventario';
+        </script>";
 			}else if($registro == "nostock"){
-				echo "<script>alert('La transaccion no se realizo, stock insuficiente')</script>";
+				echo "<script>swal('Stock insuficiente!', 'La cantidad ingresada excede el stock disponible del producto', 'warning');</script>";
 			}else{
-				echo "<script>alert('Error al registrar el movimiento')</script>";
+				echo "<script>swal('Error', 'Error al registrar el movimiento', 'error');</script>";
 			}
 		}
 	}
@@ -594,9 +602,10 @@ class MVC{
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroCategoriaModel($data);
 			if($registro == "success"){ //verificar la respuesta del modelo
-				echo "<script>window.location='index.php?action=categorias';</script>";
+        echo "<script>swal('Exito!','Categoría registrada','success');
+        window.location='index.php?action=categorias';</script>";
 			}else{
-				echo "<script>alert('Error al registrar la categoria')</script>";
+				echo "<script>swal('Error','Ocurrió un error al registrar','error');</script>";
 			}
 		}
 	}
@@ -613,9 +622,10 @@ class MVC{
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroUsuarioModel($data);
 			if($registro == "success"){ //verificar la respuesta del modelo
-				echo "<script>window.location='index.php?action=usuarios';</script>";
+        echo "<script>swal('Exito!','Usuario registrado','success');
+        window.location='index.php?action=usuarios';</script>";
 			}else{
-				echo "<script>alert('Error al registrar el usuario')</script>";
+				echo "<script>swal('Error','Ocurrió un error al registrar','error');</script>";
 			}
 		}
 	}
@@ -633,9 +643,10 @@ class MVC{
 			//peticion al modelo del reigstro del producto mandando como param la informacion de este
 			$registro = Crud::registroTiendaModel($data);
 			if($registro == "success"){ //verificar la respuesta del modelo
-				echo "<script>window.location='index.php?action=tiendas';</script>";
+        echo "<script>swal('Exito!','Tienda registrada','success');
+        window.location='index.php?action=tiendas';</script>";
 			}else{
-				echo "<script>alert('Error al registrar la tienda')</script>";
+				echo "<script>swal('Error','Ocurrió un error al registrar','error');</script>";
 			}
 		}
 	}
@@ -724,7 +735,7 @@ class MVC{
                       </div>
                     </div>
                   </div>
-                  <input type='submit' name='btn_actualizar' value='Guardar cambios' class='btn btn-success' style='float: right;'>
+                <button type='submit' name='btn_actualizar' id='targ'  class='btn btn-success' onclick='c();' style='float:right;'>Guardar cambios</button>
                   </div>
                   ";
 		}
@@ -821,7 +832,7 @@ class MVC{
        echo "<script>window.location='index.php?action=productos';</script>";
         
 			}else{
-				echo "<script>alert('Error al actualizar')</script>";
+				echo "<script>swal('Error', 'Ocurrio un error al guardar los cambios', 'error');</script>";
 			}
 		}
 	}
@@ -842,7 +853,7 @@ class MVC{
        echo "<script>window.location='index.php?action=usuarios';</script>";
         
 			}else{
-				echo "<script>alert('Error al actualizar')</script>";
+				echo "<script>swal('Error', 'Ocurrio un error al guardar los cambios', 'error');</script>";
 			}
 		}
 	}
@@ -862,7 +873,7 @@ class MVC{
        echo "<script>window.location='index.php?action=tiendas';</script>";
         
 			}else{
-				echo "<script>alert('Error al actualizar')</script>";
+				echo "<script>swal('Error', 'Ocurrio un error al guardar los cambios', 'error');</script>";
 			}
 		}
 	}
@@ -886,7 +897,7 @@ class MVC{
        echo "<script>window.location='index.php?action=categorias';</script>";
         
 			}else{
-				echo "<script>alert('Error al actualizar')</script>";
+				echo "<script>swal('Error', 'Ocurrio un error al guardar los cambios', 'error');</script>";
 			}
 		}
 	}
@@ -975,9 +986,15 @@ class MVC{
 		//se ejecuta el metodo borrar del modelo mandando como paremtros los explicados anteriormente
 		$peticion = Crud::borrarXModel($id, $tabla, $_SESSION['tienda']);
 		if($peticion == "success"){ //verificar respuesta
-			echo "<script>window.location='index.php?action=".$tabla."';</script>";
+      if($tabla == "tiendas" && $id == $_SESSION["tienda"]){
+        $_SESSION["tienda"] = 1;
+      }
+			echo "<script>
+      swal('Exito', 'Operación completada', 'success');
+      window.location='index.php?action=".$tabla."';
+      </script>";
 		}else{
-			echo "<script>alert('Error al borrar')</script>";
+			echo "<script>swal('Error', 'Ocurrio un error al dar de baja el registro', 'error');</script>";
 		}
 	}
 
