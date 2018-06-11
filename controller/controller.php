@@ -321,7 +321,7 @@ class MVC{
           
 					echo "<script>window.location='index.php';</script>";
 				}else{//No existe la tienda
-					echo "<script>swal('Tienda desactivada', 'La tienda a la que intentas fue borrada o desactivada', 'error');</script>";
+					echo "<script>swal('Tienda desactivada', 'La tienda a la que intentas ingresar fue borrada o desactivada', 'error');</script>";
 				}
         
 			}else{
