@@ -44,7 +44,7 @@
                   <div class="form-group">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Listado de ventas</h3>
+                        <h3 class="card-title">Reporte de ventas</h3>
                       </div>
                     <div class="card-body p-0">
                       <br>
