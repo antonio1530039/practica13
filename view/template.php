@@ -60,47 +60,6 @@
 <!-- ./wrapper -->
   </body>
   
-  <!-- Modal para borrar algo-->
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-               <h3>
-                 Confirmación de baja
-              </h3> 
-            </div>
-            <div class="modal-body">
-               <div class="form-group">
-                    <p>
-                    <label>Ingresa tu contraseña para confirmar baja</label>
-                    <input type="password" id="contra_txt" class="form-control" placeholder="Contraseña">
-                    <p id="error" style="color:red"></p> 
-                 </p>
-                  </div>
-          </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-danger btn-ok" onclick="confirmar();">Confirmar</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-  
-
-
-  
-  
-
-  
-  
-
-
-<!--<footer class="main-footer">
-    <strong>Copyright &copy; 2018 <a href="http://adminlte.io">UPV</a>.</strong>
-    All rights reserved.
-    
-  </footer> -->
 
 <!-- jQuery -->
 <script src="view/plugins/jquery/jquery.min.js"></script>
@@ -132,16 +91,6 @@
 <script src="view/plugins/select2/select2.full.min.js"></script>
 <script type="text/javascript">
  
-        //funcion de confirmacion en js para confimar el borrado de un registro
-        function confirmar(){
-          var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
-          var x = document.getElementById("contra_txt").value;
-          if(x != ps){
-            document.getElementById("error").innerHTML = "Contraseña incorrecta";
-             event.preventDefault();
-          }
-           
-        }
 
       //funcion de confirmacion de cierre de sesion, muestra un sweet alert
         function confirmLogout(){
@@ -151,6 +100,7 @@
           text: "¿Seguro que deseas cerrar la sesión?",
           type: "warning",
           showCancelButton: true,
+          cancelButtonText: "Cancelar",
           confirmButtonClass: "btn-info",
           confirmButtonText: "Si, estoy seguro",
           closeOnConfirm: false
@@ -162,13 +112,6 @@
      
          
         }
-  
-  
-     $('#confirm-delete').on('show.bs.modal', function(e) {
-       document.getElementById("error").innerHTML = "";
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-    });
   
       //funcion encargada de mostrar un alert cuando el usuario da clic en el boton actualizar y pida la contraseña
     function c(){
@@ -231,6 +174,70 @@
         });
       
      }
+
+     //funcion que se manda llamar al tratar de DESACTIVAR alguna tienda, muestra un sweet alert pidiendo la contraseña del usuario
+    function d(id){
+       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+        event.preventDefault();
+        swal({
+          title: "Confirmar desactivación de tienda",
+          text: "<p>Ingresa tu contraseña para desactivar la tienda</p><br><input type='password' class='form-control' id='pass_sw_3' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa_3' style='color:red'></label><br>",
+          html: true,
+          
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Confirmar",
+          closeOnConfirm: false,
+          inputPlaceholder: "Escribe tu contraseña aqui",
+        }, function () {
+          var inputValue = document.getElementById("pass_sw_3").value;
+          if (inputValue === false) return false;
+          if (inputValue != ps) {
+            document.getElementById("err_sa_3").innerHTML = "Contraseña incorrecta";
+            return false
+          }
+          var ur = document.getElementById("desactivar"+id).href;
+          //alert(ur);
+          window.location = ur;
+          swal("Exito!", "Tienda desactivada", "success");
+        });
+      
+     }
+
+
+     //funcion que se manda llamar al tratar de activar alguna tienda, muestra un sweet alert pidiendo la contraseña del usuario
+    function a(id){
+       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+        event.preventDefault();
+        swal({
+          title: "Confirmar activación de tienda",
+          text: "<p>Ingresa tu contraseña para activar la tienda</p><br><input type='password' class='form-control' id='pass_sw_4' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa_4' style='color:red'></label><br>",
+          html: true,
+          
+          type: "info",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Confirmar",
+          closeOnConfirm: false,
+          inputPlaceholder: "Escribe tu contraseña aqui",
+        }, function () {
+          var inputValue = document.getElementById("pass_sw_4").value;
+          if (inputValue === false) return false;
+          if (inputValue != ps) {
+            document.getElementById("err_sa_4").innerHTML = "Contraseña incorrecta";
+            return false
+          }
+          var ur = document.getElementById("activar"+id).href;
+          //alert(ur);
+          window.location = ur;
+          swal("Exito!", "Tienda activada", "success");
+        });
+      
+     }
+
+
+
   //crear datable para Historial y ordenar por fecha
     $(document).ready(function() {
     $('#htable').DataTable( {
@@ -243,6 +250,7 @@
           $(function () {
             $('.select2').select2();
             $("#example1").DataTable();
+            $("#example2").DataTable();
           });
       </script> 
 

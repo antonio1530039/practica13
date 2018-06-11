@@ -37,7 +37,8 @@
         <div class="row">
           <!-- left column -->
             <!-- general form elements -->
-            <div class="col-4"></div>
+            <div class="col-3"></div>
+            <div class="col-6">
             <div class="card card-primary">
                <div class="card-header">
                         <h3 class="card-title">Por favor, Ingresa la información de la tienda</h3>
@@ -61,6 +62,7 @@
                    <input type="submit" name="btn_agregar" value="Registrar" class="btn btn-success" style="float: right;">
             
             </div>   
+            </div>
             </div>
             <!-- -->
               </div>

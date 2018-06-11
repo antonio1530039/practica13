@@ -22,7 +22,7 @@ class Enlaces{
 	    else if($enlace == "login"){
 	      $module = "view/login.php";
 	    }
-	    else if($enlace == "ingresar_tienda"){
+	    else if($enlace == "ingresar_tienda" || $enlace == "desactivar_tienda" || $enlace == "activar_tienda"){
 	      $module = "model/$enlace.php";
 	    }
 		else{

@@ -34,10 +34,8 @@
           <!-- left column -->
           <div class="col-md-12">
             <!-- general form elements -->
-            <div class="card card-primary">
-              <!-- /.card-header -->
-              <!-- form start -->
               <form role="form">
+                            <div class="card card-primary">
                 <div class="card-body">
                   <div class="form-group">
                     <input type="button" class="btn btn-primary" name="btn_back" value="Registrar tienda" onclick="window.location = 'index.php?action=registro_tienda'" style="float: right;">
@@ -46,7 +44,7 @@
                   <div class="form-group">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Listado de tiendas registradas</h3>
+                        <h3 class="card-title">Listado de tiendas activadas</h3>
                       </div>
                     <div class="card-body p-0">
                       <br>
@@ -58,6 +56,7 @@
                         <th>Direccion</th>
                         <th>Fecha de registro</th>
                         <th>Editar</th>
+                        <th>Desactivar</th>
                         <th>Eliminar</th>
                         <th>Ingresar</th>
                       </thead>
@@ -73,8 +72,49 @@
                   </div>
                   </div>
                 </div>
+              </div>
+
+
+
+              <div class="card card-primary">
+                <div class="card-body">
+                  <div class="form-group">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Tiendas desactivadas</h3>
+                      </div>
+                    <div class="card-body p-0">
+                      <br>
+                    <div class="table-responsive">
+                    <table width="100%" id="example2" class="table table-bordered table-striped">
+                      <thead>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>Fecha de registro</th>
+                        <th>Editar</th>
+                        <th>Activar</th>
+                        <th>Eliminar</th>
+                      </thead>
+                      <tbody>
+                        <?php 
+                        //listado de tiendas
+                       // $controller_tiendas->getTiendasController($_SESSION['user_info']['id']); 
+                        $controller_tiendas->getTiendasDesactivadasController(); 
+                         ?>
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
               </form>
-            </div>    
+
     </div>
           </div>
         </div>

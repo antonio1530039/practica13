@@ -18,11 +18,16 @@ class Crud extends Conexion{
 	//metodo vistaXTablaModel: dado un nombre de tabla realiza un select y retorna el contenido de la tabla, considerando solamente registros no borrados.
 	public function vistaXTablaModel($table, $tiendas_id){
 		//verificar si la tabla a mostrar es tienda debido a que no cuenta con campo tiendas_id (es la tabla padre)
-		if($table == "tiendas"){
-			 $stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0"); //preparacion de la consulta SQL 
-		}else if($table == "transaccion"){
-      $stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id ORDER BY fecha ASC"); //preparacion de la consulta SQL 
-      $stmt->bindParam(":tiendas_id",$tiendas_id);
+	if($table == "tiendas"){
+			if($tiendas_id == "desactivadas"){
+				$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and active=0"); //preparacion de la consulta SQL
+			 }else{
+				$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and active=1"); //preparacion de la consulta SQL 
+			
+			}
+	}else if($table == "transaccion"){
+      		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id ORDER BY fecha ASC"); //preparacion de la consulta SQL 
+      		$stmt->bindParam(":tiendas_id",$tiendas_id);
     }
     else{
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id"); //preparacion de la consulta SQL 
@@ -33,6 +38,7 @@ class Crud extends Conexion{
 		$stmt->close();
 
 	}
+
 
 	//metodo registroProductoModel: dado un arreglo asociativo de datos, se inserta en la tabla productos los datos especificados
 	public function registroProductoModel($data){
@@ -151,10 +157,16 @@ class Crud extends Conexion{
 		}
 		if($table == "tiendas" || $table == "usuarios"){ //cuando se pide un registro de tienda, esta no contiene el id de tiendas_id porque es la tabla en la que se basa todo
 			//se prepara la consulta sql
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0");
+			if($table == "tiendas"){
+					$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0 and active=1");
 					$stmt->bindParam(":id",$id); //se asocia el parametro 
+			}else{
+				$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0");
+					$stmt->bindParam(":id",$id); //se asocia el parametro 
+			}
+			
 		}else    
-    {
+    	{
 			//se prepara la consulta sql
 		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $idName = :id and deleted = 0 and tiendas_id = :tiendas_id");
 		$stmt->bindParam(":id",$id); //se asocia el parametro 
@@ -274,6 +286,35 @@ class Crud extends Conexion{
 				return "error";
 			}
 		$stmt->close();
+	}
+
+
+	//funncion que en base un id de una tienda la desactiva (cambia el valor de active de 1 a 0)
+	public function desactivateTiendaModel($id){
+		$stmt = Conexion::conectar()->prepare("UPDATE tiendas SET active=0 WHERE id = :id"); //actualizar a 1 el campo deleted de la tabla
+		$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+		if($stmt->execute()){
+			return "success";
+		}else{
+			return "error";
+		}
+		$stmt->close();
+
+
+	}
+
+	//funncion que en base un id de una tienda la desactiva (cambia el valor de active de 1 a 0)
+	public function activateTiendaModel($id){
+		$stmt = Conexion::conectar()->prepare("UPDATE tiendas SET active=1 WHERE id = :id"); //actualizar a 1 el campo deleted de la tabla
+		$stmt->bindParam(":id",$id); //se asocia el parametro indicado
+		if($stmt->execute()){
+			return "success";
+		}else{
+			return "error";
+		}
+		$stmt->close();
+
+
 	}
 
 }

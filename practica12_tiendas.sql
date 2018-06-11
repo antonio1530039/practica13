@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2018 a las 06:40:08
+-- Tiempo de generación: 11-06-2018 a las 05:17:04
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.9
 
@@ -40,9 +40,12 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`, `deleted`, `tiendas_id`) VALUES
-(1, 'Lacteos', 1, 1),
+(1, 'Lacteos', 0, 1),
 (2, 'Abarrotes', 0, 2),
-(3, 'Carnes', 0, 2);
+(3, 'Carnes', 0, 2),
+(20, 'Reposteria', 0, 2),
+(21, 'Cat2', 1, 2),
+(22, 'Semillas', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -68,8 +71,13 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `codigo`, `nombre`, `descripcion`, `precio_unitario`, `stock`, `id_categoria`, `fecha_registro`, `deleted`, `tiendas_id`) VALUES
-(1, 'prod1', 'Galletas Marias', 'Galletas de Harina', '10.50', 50, 2, '2018-06-08', 0, 2),
-(2, 'prod982', 'Kg carne bistec', 'Kilogramo de carne de bistec', '100.00', 500, 3, '2018-06-08', 0, 2);
+(7, 'Cod01', 'Galletas Lors - Extra Queso', 'Galletas de maiz', '11.50', 106, 2, '2018-06-09', 0, 2),
+(8, 'p02', 'Coca cola 600 ml', 'Refresco de cola', '15.00', 60, 3, '2018-06-09', 0, 2),
+(9, 'p21', 'Cigarros Marbolo Rojo 14\'s', 'Tabaco', '52.00', 40, 2, '2018-06-09', 0, 2),
+(10, 'pd01', 'Galletas Lors', 'z', '22.00', 333, 2, '2018-06-09', 0, 2),
+(11, '3232', 'weqeqwe Editado', 'wqeqe', '22.00', 2232, 2, '2018-06-09', 0, 2),
+(12, '435', '2222222', '22222', '222.00', 2222, 2, '2018-06-09', 1, 2),
+(13, 'pruebaProd', 'Martillo', 'Martillo de fierro', '250.00', 100, 2, '2018-06-09', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -82,6 +90,7 @@ CREATE TABLE `tiendas` (
   `nombre` varchar(255) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `fecha_registro` date NOT NULL,
+  `active` int(11) NOT NULL DEFAULT '1',
   `deleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -89,11 +98,12 @@ CREATE TABLE `tiendas` (
 -- Volcado de datos para la tabla `tiendas`
 --
 
-INSERT INTO `tiendas` (`id`, `nombre`, `direccion`, `fecha_registro`, `deleted`) VALUES
-(1, 'Sucursal Root', 'Col centro', '2018-06-06', 0),
-(2, 'GranD 2', 'Col. Centro 2', '2018-06-07', 0),
-(3, 'Walmart', 'Cd. Victoria', '2018-06-08', 0),
-(4, 'TiendaDeWiki', 'Wikilandia', '2018-06-08', 0);
+INSERT INTO `tiendas` (`id`, `nombre`, `direccion`, `fecha_registro`, `active`, `deleted`) VALUES
+(1, 'Sucursal Root', 'Col centro', '2018-06-05', 1, 0),
+(2, 'GranD', 'Col. Centro Cd Victoria', '2018-06-04', 1, 0),
+(3, 'Walmart', 'Cd. Victoria', '2018-06-03', 1, 0),
+(9, 'TiendaMainero', 'Col mainero', '2018-06-01', 1, 0),
+(10, 'Waldos', '16 Guerrero', '2018-06-11', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -118,7 +128,12 @@ CREATE TABLE `transaccion` (
 --
 
 INSERT INTO `transaccion` (`id`, `id_producto`, `id_usuario`, `cantidad`, `tipo`, `fecha`, `serie`, `deleted`, `tiendas_id`) VALUES
-(1, 1, 2, 50, 'Salida', '2018-06-08', '9823', 0, 2);
+(10, 9, 1, 50, 'Entrada', '2018-06-08', '928321', 0, 2),
+(11, 8, 1, 5, 'Salida', '2018-06-07', '9382', 0, 2),
+(12, 9, 1, 10, 'Salida', '2018-06-05', '2812', 0, 2),
+(13, 8, 1, 10, 'Entrada', '2018-06-06', '232132', 0, 2),
+(14, 8, 1, 5, 'Entrada', '2018-06-09', '123', 0, 2),
+(15, 7, 1, 6, 'Entrada', '2018-06-09', '7777', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -143,9 +158,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `user`, `password`, `fecha_registro`, `tipo_usuario`, `deleted`, `tiendas_id`) VALUES
 (1, 'mario', 'mario', '2018-06-07', 1, 0, 1),
 (2, 'jose', 'jose', '2018-06-07', 0, 0, 2),
-(3, 'checo2', 'checo', '2018-06-07', 0, 0, 2),
-(4, 'wiki', 'wiki', '2018-06-08', 0, 0, 4),
-(5, 'x', 'x', '2018-06-08', 0, 0, 1);
+(10, 'qwerty2', 'qwerty2x', '2018-06-09', 0, 1, 2);
 
 --
 -- Índices para tablas volcadas
@@ -197,31 +210,31 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tiendas`
 --
 ALTER TABLE `tiendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `transaccion`
 --
 ALTER TABLE `transaccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

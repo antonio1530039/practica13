@@ -23,19 +23,20 @@ class MVC{
           if($_SESSION["user_info"]["tipo_usuario"] == "1" && $_SESSION["tienda"] == "1"){
             
              
-             if($enlace != "ingresar_tienda" && $enlace != "borrar" && $enlace != "editar_tienda" && $enlace != "logout" && $enlace != "registro_tienda") { //sin embargo puede redireccionar a ingreso de tienda para poder ingresar a una
+             if($enlace != "ingresar_tienda" && $enlace != "borrar" &&  $enlace != "activar_tienda" &&  $enlace != "desactivar_tienda" && $enlace != "editar_tienda" && $enlace != "logout" && $enlace != "registro_tienda") { //sin embargo puede redireccionar a ingreso de tienda para poder ingresar a una
                 $enlace = "tiendas";
              }
             
             
             
           }
-          //verificar que al borrar algo no sea la tienda ROOT o base, o que intenten modificarla
-          if($enlace == "borrar" || $enlace == "editar_tienda"){
-            //Sabiendo que el usuario ROOT puede tener acceso a editar_tienda y a borrar ; se debe prevenir que no intente editar o borrar
+          //Sabiendo que el usuario ROOT puede tener acceso a editar_tienda y a borrar ; se debe prevenir que no intente editar o borrar
             //por url la tienda root
             $idX = (isset($_GET["id"])) ? $_GET["id"] : ""; //en caso de existir la variable id del metodo GET guardarla
             $tipoOTabla = (isset($_GET["tipo"])) ? $_GET["tipo"] : ""; //en caso de existir la variable tipoOTabla del metodo GET guardarla
+          //verificar que al borrar algo no sea la tienda ROOT o base, o que intenten modificarla
+          if($enlace == "borrar" || $enlace == "editar_tienda"){
+            
             
             if($enlace== "borrar"){
               if($tipoOTabla == "tiendas" && $idX == "1"){ //si intentan borrar la tienda 1 se cancele y redireccione al index
@@ -47,13 +48,18 @@ class MVC{
             }else{
               if($idX == "1"){//si se quiere editar tienda
                 $enlace = "tiendas"; //redireccionar al index;
-              }
+             }
          
             }
        
           }
+          if( $enlace == "desactivar_tienda" && $idX == "1"){
+          	$enlace = "tiendas";
+          }
+
+
           //condicionar que si el usuario no es root e intenta acceder a gestion de tiendas; redireccionar al index
-          if($_SESSION["user_info"]["tipo_usuario"] != "1" && ($enlace == "tiendas" || $enlace == "editar_tienda" || $enlace == "registro_tienda")){
+          if($_SESSION["user_info"]["tipo_usuario"] != "1" && ($enlace == "tiendas" || $enlace == "editar_tienda" || $enlace == "registro_tienda" || $enlace == "ingresar_tienda" || $enlace == "desactivar_tienda" || $enlace == "activar_tienda")){
             $enlace = "index";//redireccionar al index
           }
         }
@@ -151,7 +157,7 @@ class MVC{
                       <li class='nav-item'>
                         <a href='' class='nav-link' onclick='confirmLogout();'>
                           <i class='nav-icon fa fa-sign-out'></i>
-                          <p>Logout</p>
+                          <p>Cerrar Sesión</p>
                         </a>
                       </li>
                       </ul>
@@ -201,11 +207,16 @@ class MVC{
                           <p>Gestion de Usuarios</p>
                         </a>
                       </li>
-
+                      <li class='nav-item'>
+                        <a href='index.php?action=ingresar_tienda&id=1' class='nav-link'>
+                          <i class='nav-icon fa fa-sign-out'></i>
+                          <p>Salir de tienda</p>
+                        </a>
+                      </li>
                       <li class='nav-item'>
                         <a href='' class='nav-link' onclick='confirmLogout();'>
                           <i class='nav-icon fa fa-sign-out'></i>
-                          <p>Logout</p>
+                          <p>Cerrar Sesión</p>
                         </a>
                       </li>
                     </ul>
@@ -271,7 +282,7 @@ class MVC{
 			              <li class='nav-item'>
 			                <a href='' class='nav-link' onclick='confirmLogout();'>
 			                  <i class='nav-icon fa fa-sign-out'></i>
-			                  <p>Logout</p>
+			                  <p>Cerrar Sesión</p>
 			                </a>
 			              </li>
 			            </ul>
@@ -310,7 +321,7 @@ class MVC{
           
 					echo "<script>window.location='index.php';</script>";
 				}else{//No existe la tienda
-					echo "<script>swal('Tienda desactivada', 'La tienda a la que intentas ingresar esta desactivada', 'error');</script>";
+					echo "<script>swal('Tienda desactivada', 'La tienda a la que intentas fue borrada o desactivada', 'error');</script>";
 				}
         
 			}else{
@@ -384,7 +395,8 @@ class MVC{
 			$_SESSION['tienda'] = $id;
 			echo "<script>window.location='index.php';</script>";
 		}else{
-			echo "<script>swal('Error', 'La tienda a la que intentas ingresar NO EXISTE', 'error');</script>";
+			echo "<script>swal('Error', 'La tienda a la que intentas ingresar fue borrada o esta desactivada', 'error');</script>";
+			echo "<script>window.location='index.php';</script>";
 		}
 	}
 
@@ -423,8 +435,9 @@ class MVC{
 					echo "<td>".$item['fecha_registro']."</td>";
 	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_tienda&id=".$item['id']."></a></td>";
           //mandar por propiedad onclick el id del elemento tag a para eleminarlo
+	          		echo "<td>"."<a class='btn btn-warning fa  fa-circle-o' id='desactivar".$item["id"]."' onclick='d(".$item["id"].");' href='index.php?action=desactivar_tienda&id=".$item['id']."'></a></td>";  
+
 				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."'></a></td>";  
-           
 	       echo "<td><a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
 	           //href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."'
 	        echo "</tr>";
@@ -436,6 +449,7 @@ class MVC{
 					echo "<td>".$item['fecha_registro']."</td>";
 	        echo "<td></td>";
 					echo "<td></td>";  
+					echo "<td></td>";  
 	       echo "<td>"."<a class='btn btn-success fa fa-sign-in' href=index.php?action=ingresar_tienda&id=".$item['id']."></a></td>";
 	           
 	        echo "</tr>";
@@ -446,6 +460,34 @@ class MVC{
 		}
 		
 	}
+
+	//funcion encargada de crear una tabla con las tiendas desactivadas en la base de datos
+	public function getTiendasDesactivadasController(){
+		$informacion = Crud::vistaXTablaModel("tiendas", "desactivadas");//ejecucion del metodo del modelo
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de las categorias
+			foreach ($informacion as $row => $item) {
+				if($item['id'] != 1){//no mostrar la tienda root (la tienda  a la que pertenece el super admin)
+					echo "<tr>";
+					echo "<td>".$item['id']."</td>";
+					echo "<td>".$item['nombre']."</td>";
+					echo "<td>".$item['direccion']."</td>";
+					echo "<td>".$item['fecha_registro']."</td>";
+	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=editar_tienda&id=".$item['id']."></a></td>";
+          //mandar por propiedad onclick el id del elemento tag a para eleminarlo
+	          		echo "<td>"."<a class='btn btn-warning fa  fa-circle' id='activar".$item["id"]."' onclick='a(".$item["id"].");' href='index.php?action=activar_tienda&id=".$item['id']."'></a></td>";  
+
+				  echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=tiendas&id=".$item['id']."'></a></td>";  
+	        echo "</tr>";
+				}
+			}
+		}
+		
+	}
+
+
+
+
 
 
 
@@ -995,6 +1037,38 @@ class MVC{
       </script>";
 		}else{
 			echo "<script>swal('Error', 'Ocurrio un error al dar de baja el registro', 'error');</script>";
+		}
+	}
+
+	//Funcion que dado un idejecuta el metodo del modelo y desactiva la tienda especificada
+	public function desactivateTiendaController($id){
+		//se ejecuta el metodo desactivar del modelo mandando como paremtro el id de la tienda
+		$peticion = Crud::desactivateTiendaModel($id);
+		if($peticion == "success"){ //verificar respuesta
+	      if($id == $_SESSION["tienda"]){
+	        $_SESSION["tienda"] = 1;
+	      }
+	echo "<script>
+      window.location='index.php?action=tiendas';
+      </script>";
+		}else{
+			echo "<script>swal('Error', 'Ocurrio un error al desactivar la tienda', 'error');</script>";
+		}
+	}
+
+	//Funcion que dado un id ejecuta el metodo del modelo y activa la tienda especificada
+	public function activateTiendaController($id){
+		//se ejecuta el metodo desactivar del modelo mandando como paremtro el id de la tienda
+		$peticion = Crud::activateTiendaModel($id);
+		if($peticion == "success"){ //verificar respuesta
+	      if($id == $_SESSION["tienda"]){
+	        $_SESSION["tienda"] = 1;
+	      }
+	echo "<script>
+      window.location='index.php?action=tiendas';
+      </script>";
+		}else{
+			echo "<script>swal('Error', 'Ocurrio un error al activar la tienda', 'error');</script>";
 		}
 	}
 
