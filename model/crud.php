@@ -318,7 +318,7 @@ class Crud extends Conexion{
 	//metodo borrarXModel: dado un id de un registro y un nombre de tabla se realiza la actualizacion del campo deleted en la base de datos de cualquier tabla existente
 	public function borrarXModel($id, $table, $tiendas_id){
 		//se define el nombre de la llave principal segun el nombre de la tabla especificado
-		if($table=="productos" || $table=="categorias" || $table=="usuarios" || $table=="tiendas"){
+		if($table=="productos" || $table=="categorias" || $table=="usuarios" || $table=="tiendas" || $table=="ventas"){
 			$idName = "id";
 		}
 		if($table == "categorias"){//borrar los productos tambien (borrado logico)

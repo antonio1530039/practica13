@@ -487,7 +487,8 @@ class MVC{
 					echo "<td>".$usuario['user']."</td>";
 					echo "<td>".$tienda['nombre']."</td>";
 					echo "<td>".$item['total']."</td>";
-	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=detalle_venta&id=".$item['id']."></a></td>";
+	          		echo "<td>"."<a class='btn btn-secondary fa fa-file-text-o' href=index.php?action=detalle_venta&id=".$item['id']."></a></td>";
+	          		 echo "<td>"."<a class='btn btn-danger fa fa-trash' id='borrar_btn".$item["id"]."' onclick='b(".$item["id"].");' href='index.php?action=borrar&tipo=ventas&id=".$item['id']."'></a></td>";  
 	        echo "</tr>";
         }
 				
@@ -920,7 +921,10 @@ class MVC{
 	//funcion encargada de, dado un id de una venta, se obtienen los datos de la base de datos y se imprimen los productos asociados a esta
 	public function getVentaController(){
 		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
-		$peticion = Crud::getProductosVentasModel($id); //peticion al modelo del registro especificado por el id
+
+		$peticionVenta = Crud::getRegModel($id, "ventas", $_SESSION['tienda']);
+		if(!empty($peticionVenta)){
+			$peticion = Crud::getProductosVentasModel($id); //peticion al modelo del registro especificado por el id
 		$venta = Crud::getRegModel($id, "ventas", $_SESSION['tienda']);
 		if(!empty($peticion)){
 			echo '
@@ -963,6 +967,10 @@ class MVC{
 		}else{
 			echo "<script>window.location='index.php?action=ventas';</script>";
 		}
+	}else{
+		echo "<script>window.location='index.php?action=ventas';</script>";
+	}
+		
 	}
 
 	//funcion encargada de, dado un id de un usuario, se obtienen los datos de la base de datos y se imprimen los controles con los datos en los valores para editarlos posteriormente

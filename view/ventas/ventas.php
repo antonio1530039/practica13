@@ -57,6 +57,7 @@
                          <th>Tienda</th>
                         <th>Total</th>
                         <th>Ver detalles</th>
+                         <th>Eliminar</th>
                       </thead>
                       <tbody>
                         <?php 
