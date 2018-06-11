@@ -239,11 +239,12 @@
 
 
   //crear datable para Historial y ordenar por fecha
+  /*
     $(document).ready(function() {
     $('#htable').DataTable( {
         "order": [[ 3, "desc" ]]
     } );
-} );
+} );*/
 
 
       //necesario para mostrar dataTables

@@ -26,7 +26,7 @@ class Crud extends Conexion{
 			
 			}
 	}else if($table == "transaccion"){
-      		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id ORDER BY fecha ASC"); //preparacion de la consulta SQL 
+      		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE deleted=0 and tiendas_id = :tiendas_id ORDER BY id DESC"); //preparacion de la consulta SQL 
       		$stmt->bindParam(":tiendas_id",$tiendas_id);
     }
     else{
@@ -181,7 +181,7 @@ class Crud extends Conexion{
 	//metodo getQueryFromX: dado un nombre de tabla, un nombre de campo, un operador (=, >, >=, <, <= ) y un valor, se obtienen todos los registros que cumplen este requisito de la tabla dada
 	public function getQueryFromX($table, $field,$operator ,$equals, $tiendas_id){
     	//se prepara la consulta sql
-		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $field $operator :equals and deleted = 0 and tiendas_id = $tiendas_id");
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table WHERE $field $operator :equals and deleted = 0 and tiendas_id = $tiendas_id ORDER BY id DESC");
 		$stmt->bindParam(":equals",$equals); //se asocia el parametro 
 		$stmt->execute(); //se ejecuta la consulta
 		return $stmt->fetchAll(); //se retorna el resultado de la consulta
