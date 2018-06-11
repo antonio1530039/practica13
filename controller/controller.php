@@ -977,7 +977,12 @@ class MVC{
                         <h3 class='card-title'>$title (".count($peticion).")</h3>
                       </div>
                     <div class='card'>";
-		echo "<div class='table-responsive'><table width='100%' class='table table-bordered table-striped'>";
+                    if($table=="productos"){
+                    	echo "<br><div class='table-responsive'><table id='example1' width='100%' class='table table-bordered table-striped'>";
+                    }else{
+                    	echo "<br><div class='table-responsive'><table id='example2' width='100%' class='table table-bordered table-striped'>";
+                    }
+		
 			echo "<thead>";
 				echo "<tr>";
 					if($table=="transaccion"){
@@ -993,7 +998,7 @@ class MVC{
 					
 				echo "</tr>";
 			echo "</thead>";
-		echo "<tbody>";
+		//echo "<tbody>";
 		if(!empty($peticion)){ //se verifica que la variable peticion no este vacia
 			echo "<tbody>";
 			foreach ($peticion as $row => $item) {
