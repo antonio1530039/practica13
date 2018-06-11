@@ -39,6 +39,19 @@ class Crud extends Conexion{
 
 	}
 
+	//metodo getProductosVentasModel: dado un id de venta, trae todos los registros de esa venta de la tabla ventasProductos
+	public function getProductosVentasModel($id){
+		//preparar la conexion
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM ventas_productos WHERE deleted=0 and id_venta = :id"); //preparacion de la consulta SQL 
+      		$stmt->bindParam(":id",$id);
+		$stmt->execute(); //ejecucion de la consulta
+		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+
+	}
+
+
+
 
 	//metodo registroProductoModel: dado un arreglo asociativo de datos, se inserta en la tabla productos los datos especificados
 	public function registroProductoModel($data){
@@ -147,12 +160,50 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
+	//metodo registroVentaModel: dado un arreglo asociativo de datos, se inserta en la tabla ventas los datos especificados
+	public function registroVentaModel($data){
+		$stmt = Conexion::conectar()->prepare("INSERT INTO ventas(fecha,id_usuario,tiendas_id, total) VALUES(:fecha, :id_usuario, :tiendas_id, :total)");
+		//preparacion de parametros
+		$stmt->bindParam(":fecha", $data['fecha']);
+		$stmt->bindParam(":id_usuario", $data['id_usuario']);
+		$stmt->bindParam(":tiendas_id", $data['tiendas_id']);
+		$stmt->bindParam(":total", $data['total']);
+		if($stmt->execute()) //ejecucion
+			return "success"; //respuesta
+		else
+			return "error";
+		$stmt->close();
+	}
+
+	//metodo registroProductoEnVentaModel: dado un arreglo asociativo de datos, se inserta en la tabla ventas_productos los datos especificados
+	public function registroProductoEnVentaModel($data){
+		//actualizar stock
+		$stmt = Conexion::conectar()->prepare("UPDATE productos SET stock = stock - :cantidad WHERE id=:id_producto");
+		$stmt->bindParam(":cantidad", $data['cantidad']);
+		$stmt->bindParam(":id_producto", $data['id_producto']);
+		$stmt->execute();
+		$stmt = Conexion::conectar()->prepare("INSERT INTO ventas_productos(id_producto,id_venta,subtotal, cantidad) VALUES(:id_producto, :id_venta, :subtotal, :cantidad)");
+		//preparacion de parametros
+		$stmt->bindParam(":id_producto", $data['id_producto']);
+		$stmt->bindParam(":id_venta", $data['id_venta']);
+		$stmt->bindParam(":subtotal", $data['subtotal']);
+		$stmt->bindParam(":cantidad", $data['cantidad']);
+		if($stmt->execute()) //ejecucion
+			return "success"; //respuesta
+		else
+			return "error";
+		$stmt->close();
+	}
+
+
+
+
 
 
 	//metodo getRegModel: dado un id de un registro y el nombre de la tabla se retorna la informacion del id asociado
 	public function getRegModel($id, $table, $tiendas_id){
 		//en base al nombre de la tabla se define el nombre de la llave primaria de la tabla
-		if($table=="productos" || $table == "usuarios" || $table == "categorias" || $table == "tiendas" ){
+		if($table=="productos" || $table == "usuarios" || $table == "categorias" || $table == "tiendas" || $table == "ventas_productos" || $table == "ventas"  ){
 			$idName = "id";
 		}
 		if($table == "tiendas" || $table == "usuarios"){ //cuando se pide un registro de tienda, esta no contiene el id de tiendas_id porque es la tabla en la que se basa todo
@@ -185,6 +236,17 @@ class Crud extends Conexion{
 		$stmt->bindParam(":equals",$equals); //se asocia el parametro 
 		$stmt->execute(); //se ejecuta la consulta
 		return $stmt->fetchAll(); //se retorna el resultado de la consulta
+		$stmt->close();
+	}
+
+
+	//metodo getLastVenta: retorna la ultima venta registrada
+	public function getLastVenta($tiendas_id){
+    	//se prepara la consulta sql
+		$stmt = Conexion::conectar()->prepare("SELECT MAX(id) FROM ventas WHERE deleted = 0 and tiendas_id = :tiendas_id");
+		$stmt->bindParam(":tiendas_id",$tiendas_id); //se asocia el parametro 
+		$stmt->execute(); //se ejecuta la consulta
+		return $stmt->fetch(); //se retorna el resultado de la consulta
 		$stmt->close();
 	}
 

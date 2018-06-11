@@ -24,6 +24,8 @@ class Enlaces{
 	    }
 	    else if($enlace == "ingresar_tienda" || $enlace == "desactivar_tienda" || $enlace == "activar_tienda"){
 	      $module = "model/$enlace.php";
+	    }else if($enlace == "ventas" || $enlace == "detalle_venta" || $enlace == "registro_venta"){
+	      $module = "view/ventas/$enlace.php";
 	    }
 		else{
 			$module = "view/dashboard/dashboard.php";

@@ -190,6 +190,12 @@ class MVC{
                         </a>
                       </li>
                       <li class='nav-item'>
+                        <a href='index.php?action=ventas' class='nav-link'>
+                          <i class='nav-icon fa fa-money'></i>
+                          <p>Gestion de Ventas</p>
+                        </a>
+                      </li>
+                      <li class='nav-item'>
                         <a href='index.php?action=categorias' class='nav-link'>
                           <i class='nav-icon fa fa-tags'></i>
                           <p>Gestion de Categorias</p>
@@ -260,6 +266,12 @@ class MVC{
 			                  <p>Realizar movimiento</p>
 			                </a>
 			              </li>
+			              <li class='nav-item'>
+                        <a href='index.php?action=ventas' class='nav-link'>
+                          <i class='nav-icon fa fa-money'></i>
+                          <p>Gestion de Ventas</p>
+                        </a>
+                      </li>
 			              <li class='nav-item'>
 			                <a href='index.php?action=categorias' class='nav-link'>
 			                  <i class='nav-icon fa fa-tags'></i>
@@ -461,6 +473,32 @@ class MVC{
 		
 	}
 
+	//funcion encargada de crear una tabla con las ventas registrados en la base de datos
+	public function getVentasController(){
+		$informacion = Crud::vistaXTablaModel("ventas", $_SESSION['tienda']);//ejecucion del metodo del modelo
+		if(!empty($informacion)){
+			//si el resultado no esta vacio, imprimir los datos de las categorias
+			foreach ($informacion as $row => $item) {
+					$usuario = Crud::getRegModel($item['id_usuario'], "usuarios", $_SESSION['tienda']);
+					$tienda = Crud::getRegModel($item['tiendas_id'], "tiendas", $_SESSION['tienda']);
+					echo "<tr>";
+					echo "<td>".$item['id']."</td>";
+					echo "<td>".$item['fecha']."</td>";
+					echo "<td>".$usuario['user']."</td>";
+					echo "<td>".$tienda['nombre']."</td>";
+					echo "<td>".$item['total']."</td>";
+	          		echo "<td>"."<a class='btn btn-secondary fa fa-edit' href=index.php?action=detalle_venta&id=".$item['id']."></a></td>";
+	        echo "</tr>";
+        }
+				
+				
+			}
+		}
+		
+
+
+
+
 	//funcion encargada de crear una tabla con las tiendas desactivadas en la base de datos
 	public function getTiendasDesactivadasController(){
 		$informacion = Crud::vistaXTablaModel("tiendas", "desactivadas");//ejecucion del metodo del modelo
@@ -560,12 +598,23 @@ class MVC{
 	}
 
 	//funcion que crea un select con los productos registrados
-	public function getSelectForProductos(){
+	public function getSelectForProductos($flag){
 		$informacion = Crud::vistaXTablaModel("productos", $_SESSION['tienda']); //se obtienen todos las categorias de la bd mediante la conexion al modelo
+		$c = 0;
 		if(!empty($informacion)){ 
 				foreach ($informacion as $row => $item) { //se imprimen los valores
-					echo "<option value='".$item['id']."'>".$item['codigo']. " | ".$item['nombre'] ." | " . $item['stock'] . "</option>";
+					if(!empty($flag)){
+						echo "<option value='".$c."'>".$item['codigo']. " | ".$item['nombre'] ." | " . $item['stock'] . "</option>";
+						$c++;
+					}else{
+						echo "<option value='".$item['id']."'>".$item['codigo']. " | ".$item['nombre'] ." | " . $item['stock'] . "</option>";
+				
+					}
 				}
+
+				$_SESSION['temp_productos'] = $informacion;
+				//print_r($_SESSION['temp_productos']);
+				//echo json_encode($_SESSION['temp_productos']);
 		}
 	}
 
@@ -692,6 +741,46 @@ class MVC{
 			}
 		}
 	}
+
+
+
+	//funcion encargada de verificar si se presiono un boton de registro de venta, de ser asi, se toman los datos de los controles y se ejecuta la funcion que registra en el modelo
+	public function registroVentaController(){
+		if(isset($_POST['btn_registrar'])){//verificar clic en el boton
+			//crear array con los datos a registrar tomados de los controles
+			$data = array('fecha'=> date("Y-m-d"),
+				'id_usuario' => $_SESSION['user_info']['id'],
+				'tiendas_id' => $_SESSION['tienda'],
+				'total'=> $_POST['total']
+					);
+			//peticion al modelo del reigstro del producto mandando como param la informacion de este
+			$registro = Crud::registroVentaModel($data);
+			if($registro == "success"){ //verificar la respuesta del modelo
+        
+				//obtener id de la venta
+				$venta = Crud::getLastVenta($_SESSION['tienda']);
+				//print_r($venta);
+
+				//iterar por cada producto y asi insertar en la tabla ventasproductos
+				$iter = 0;
+				while(!empty($_POST['nombre'.$iter])){
+					$data2 = array('id_producto'=> $_POST['id'.$iter],
+				'id_venta'=> $venta[0],
+				'subtotal'=> $_POST['subtotal'.$iter],
+				'cantidad'=> $_POST['cantidad'.$iter]
+					);
+					Crud::registroProductoEnVentaModel($data2); //registrar en el modelo
+		        $iter++;
+				}
+
+		        echo "<script>swal('Exito!','Venta registrada con Id: ".$venta[0]."','success');
+		        </script>";
+			}else{
+				echo "<script>swal('Error','Ocurrió un error al registrar','error');</script>";
+			}
+		}
+	}
+
 
 
 
@@ -825,6 +914,54 @@ class MVC{
                     <input type='text' class='form-control' name='password' value='".$peticion["password"]."' placeholder='Ingresa la contraseña del usuario' required=''>
                   </div>
                   ";
+		}
+	}
+
+	//funcion encargada de, dado un id de una venta, se obtienen los datos de la base de datos y se imprimen los productos asociados a esta
+	public function getVentaController(){
+		$id = (isset($_GET['id'])) ? $_GET['id'] : ""; //verificacion del id
+		$peticion = Crud::getProductosVentasModel($id); //peticion al modelo del registro especificado por el id
+		$venta = Crud::getRegModel($id, "ventas", $_SESSION['tienda']);
+		if(!empty($peticion)){
+			echo '
+					<div class="form-group">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Informacion de venta '.$id .' - Total: $'. $venta['total']. '</h3>
+                      </div>
+                    <div class="card-body p-0">
+                      <br>
+                    <div class="table-responsive">
+                    <table width="100%" id="" class="table table-bordered table-striped">
+                      <thead>
+                        <th>Id de venta</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                         <th>Subtotal</th>
+                      </thead>
+                      <tbody>';
+                      foreach ($peticion as $row => $item) {
+			          echo "<tr>";
+			          echo "<td>".$item['id_venta']."</td>";
+			          $producto = Crud::getRegModel($item['id_producto'], "productos", $_SESSION['tienda']);
+			          echo "<td>".$producto['nombre']."</td>";
+			          echo "<td>".$item['cantidad']."</td>";
+			          echo "<td>".$item['subtotal']."</td>";
+			            echo "</tr>";
+
+			        }
+                     echo '
+                        
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+			';
+		}else{
+			echo "<script>window.location='index.php?action=ventas';</script>";
 		}
 	}
 
