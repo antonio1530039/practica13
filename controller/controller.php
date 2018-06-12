@@ -936,7 +936,7 @@ class MVC{
                     <div class="card-body p-0">
                       <br>
                     <div class="table-responsive">
-                    <table width="100%" id="" class="table table-bordered table-striped">
+                    <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
                         <th>Id de venta</th>
                         <th>Producto</th>
